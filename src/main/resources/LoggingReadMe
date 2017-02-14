@@ -1,0 +1,14 @@
+org.apache.ibatis.logging
+Log：接口类，提供日志工具不同级别的记录接口
+LogException：日志异常类
+LogFactory：日志工厂类，提供多种默认实现，并支持自定义实现设置
+
+
+org.apache.ibatis.logging.commons
+org.apache.ibatis.logging.jdbc
+org.apache.ibatis.logging.jdk14
+org.apache.ibatis.logging.log4j
+org.apache.ibatis.logging.log4j2
+org.apache.ibatis.logging.nologging
+org.apache.ibatis.logging.slf4j
+org.apache.ibatis.logging.stdout
