@@ -13,7 +13,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package org.apache.ibatis.parsing;
+package org.apache.ibatis.reflection;
 
 import org.apache.ibatis.exceptions.PersistenceException;
 
@@ -21,25 +21,26 @@ import org.apache.ibatis.exceptions.PersistenceException;
  * @author Clinton Begin
  */
 /**
- * 解析异常。继承自PersistenceException，基于语义的异常。
+ * 反射异常。继承自PersistenceException，基于语义的异常。
  */
-public class ParsingException extends PersistenceException {
+public class ReflectionException extends PersistenceException {
 
-    private static final long serialVersionUID = -176685891441325943L;
+    private static final long serialVersionUID = 7642570221267566591L;
 
-    public ParsingException() {
+    public ReflectionException() {
         super();
     }
 
-    public ParsingException(String message) {
+    public ReflectionException(String message) {
         super(message);
     }
 
-    public ParsingException(String message, Throwable cause) {
+    public ReflectionException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public ParsingException(Throwable cause) {
+    public ReflectionException(Throwable cause) {
         super(cause);
     }
+
 }

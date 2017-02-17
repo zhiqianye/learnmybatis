@@ -14,20 +14,7 @@
             <artifactId>mybatis</artifactId>
             <version>3.4.1</version>
         </dependency>
-        <dependency>
-            <groupId>ognl</groupId>
-            <artifactId>ognl</artifactId>
-            <version>3.1.8</version>
-            <scope>compile</scope>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>org.javassist</groupId>
-            <artifactId>javassist</artifactId>
-            <version>3.20.0-GA</version>
-            <scope>compile</scope>
-            <optional>true</optional>
-        </dependency>
+
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
@@ -59,12 +46,6 @@
             <version>1.2</version>
             <optional>true</optional>
         </dependency>
-        <dependency>
-            <groupId>cglib</groupId>
-            <artifactId>cglib</artifactId>
-            <version>3.2.2</version>
-            <optional>true</optional>
-        </dependency>
 
         <!-- Test dependencies -->
         <dependency>
@@ -73,43 +54,8 @@
             <version>4.12</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.hsqldb</groupId>
-            <artifactId>hsqldb</artifactId>
-            <version>2.3.4</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.derby</groupId>
-            <artifactId>derby</artifactId>
-            <version>10.12.1.1</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-            <version>1.10.19</version>
-            <scope>test</scope>
-        </dependency>
-        <!-- Do not go to 2.x until we are on jdk7 -->
-        <dependency>
-            <groupId>commons-dbcp</groupId>
-            <artifactId>commons-dbcp</artifactId>
-            <version>1.4</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.spec.javax.transaction</groupId>
-            <artifactId>jboss-transaction-api_1.2_spec</artifactId>
-            <version>1.0.1.Final</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.velocity</groupId>
-            <artifactId>velocity</artifactId>
-            <version>1.7</version>
-            <scope>test</scope>
-        </dependency>
+
+
         <!-- postgresql driver is required to run the refcursor tests -->
         <dependency>
             <groupId>postgresql</groupId>
@@ -127,30 +73,6 @@
             <artifactId>jedis</artifactId>
             <version>2.9.0</version>
         </dependency>-->
-
-        <!-- <dependency>
-             <groupId>org.drools</groupId>
-             <artifactId>drools-jsr94</artifactId>
-             <version>6.5.0.Final</version>
-         </dependency>-->
-
-        <!--<dependency>
-            <groupId>org.drools</groupId>
-            <artifactId>drools-core</artifactId>
-            <version>6.5.0.Final</version>
-        </dependency>
-        <dependency>
-            <groupId>org.drools</groupId>
-            <artifactId>drools-compiler</artifactId>
-            <version>6.5.0.Final</version>
-        </dependency>-->
-
-        <!--<dependency>
-            <groupId>net.sourceforge.jadex</groupId>
-            <artifactId>jadex-rules</artifactId>
-            <version>2.4</version>
-        </dependency>-->
-
 
     </dependencies>
 

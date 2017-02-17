@@ -27,15 +27,24 @@
    字符串占位符解析
 
 
-5. 类型处理器
+5. 类型处理器(顺序待确定)
 
    JDBC基础
 
    注解基础
+   
+   反射Type与Class
 
 6. IO
 
 7. 反射
+
+   反射基本知识
+   
+   Type与Class
+   
+   Iterable和Iterator
+   
 
 8. 数据源
 

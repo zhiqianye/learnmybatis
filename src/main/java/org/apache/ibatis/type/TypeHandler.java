@@ -39,7 +39,7 @@ public interface TypeHandler<T> {
     //在结果集中，通过列索引号获取结果
     T getResult(ResultSet rs, int columnIndex) throws SQLException;
 
-    //TODO ？
+    //FIXME 从CallableStatement（存储过程Statement）中获取结果
     T getResult(CallableStatement cs, int columnIndex) throws SQLException;
 
 }
