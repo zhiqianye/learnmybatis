@@ -29,7 +29,7 @@
 
 5. 类型处理器
 
-   JDBC基础
+   JDBC基础，CopyOnWriteArrayList
 
    注解基础
 
