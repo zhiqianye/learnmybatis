@@ -32,17 +32,13 @@ import java.lang.reflect.Type;
  */
 public abstract class TypeReference<T> {
 
+    //引用的原生类型
     private final Type rawType;
 
     protected TypeReference() {
         rawType = getSuperclassTypeParameter(getClass());
     }
 
-    /**
-     *
-     * @param clazz
-     * @return
-     */
     Type getSuperclassTypeParameter(Class<?> clazz) {
         //获取直接父类的Type类型
         Type genericSuperclass = clazz.getGenericSuperclass();

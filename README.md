@@ -32,19 +32,25 @@
    JDBC基础，CopyOnWriteArrayList
 
    注解基础
-   
+
    反射Type与Class
+
+   BigDecimal和BigInteger
+
+   Blob和Clob以及java类型与二者的关系
+
+   java.util.Date与java.sql.Date的关系
+
 
 6. IO
 
 7. 反射
 
    反射基本知识
-   
+
    Type与Class
-   
+
    Iterable和Iterator
-   
 
 8. 数据源
 
