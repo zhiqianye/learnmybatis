@@ -41,8 +41,14 @@
 
    java.util.Date与java.sql.Date的关系
 
+   枚举类型与整型/字符型的转换
+
 
 6. IO
+
+   常规类加载机制
+
+   非常规类加载机制：ContextClassCloader，WebAppClassLoader等
 
 7. 反射
 
