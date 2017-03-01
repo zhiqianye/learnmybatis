@@ -24,10 +24,16 @@ import java.lang.annotation.Target;
 /**
  * @author Eduardo Macarron
  */
+
+/**
+ * 用于标记类型处理器
+ * value值表示当前处理器关联的JdbcType
+ */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface MappedJdbcTypes {
     JdbcType[] value();
+    // 是否包含空JdbcType
     boolean includeNullJdbcType() default false;
 }
