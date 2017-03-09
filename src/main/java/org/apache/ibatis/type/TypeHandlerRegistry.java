@@ -44,11 +44,15 @@ public final class TypeHandlerRegistry {
 
     //[JdbcType-处理器]
     private final Map<JdbcType, TypeHandler<?>> JDBC_TYPE_HANDLER_MAP = new EnumMap<JdbcType, TypeHandler<?>>(JdbcType.class);
+
     //[JavaType-处理器]
+    //TODO 一对多
     private final Map<Type, Map<JdbcType, TypeHandler<?>>> TYPE_HANDLER_MAP = new HashMap<Type, Map<JdbcType, TypeHandler<?>>>();
+
     //维护了一个未知类型的处理器
     private final TypeHandler<Object> UNKNOWN_TYPE_HANDLER = new UnknownTypeHandler(this);
-    //[处理器类-处理器]
+
+    //[处理器类-处理器]注册表，这个map存储了所有的TypeHandler
     private final Map<Class<?>, TypeHandler<?>> ALL_TYPE_HANDLERS_MAP = new HashMap<Class<?>, TypeHandler<?>>();
 
     public TypeHandlerRegistry() {
@@ -141,6 +145,7 @@ public final class TypeHandlerRegistry {
 
         // mybatis-typehandlers-jsr310
         try {
+            //协议上要求的处理器类型，但是实际上mybatis包中并没有实现类
             // since 1.0.0
             register("java.time.Instant", "org.apache.ibatis.type.InstantTypeHandler");
             register("java.time.LocalDateTime", "org.apache.ibatis.type.LocalDateTimeTypeHandler");
@@ -285,9 +290,10 @@ public final class TypeHandlerRegistry {
     }
 
     private <T> void register(Type javaType, TypeHandler<? extends T> typeHandler) {
+        //获取处理器的MappedJdbcType注解，用于获取它关联的Jdbc类型，用于自定义的TypeHandler，因为内置的handler没这俩注解
         MappedJdbcTypes mappedJdbcTypes = typeHandler.getClass().getAnnotation(MappedJdbcTypes.class);
         if (mappedJdbcTypes != null) {
-            //依次初测关联的JdbcType
+            //依次注册关联的JdbcType
             for (JdbcType handledJdbcType : mappedJdbcTypes.value()) {
                 register(javaType, handledJdbcType, typeHandler);
             }
@@ -345,7 +351,7 @@ public final class TypeHandlerRegistry {
                 mappedTypeFound = true;
             }
         }
-        //如果未找到MappedTypes
+        //如果未找到MappedTypes，或者找到的MappedTypes的value值为空
         if (!mappedTypeFound) {
             register(getInstance(null, typeHandlerClass));
         }
