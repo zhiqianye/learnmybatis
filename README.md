@@ -54,13 +54,25 @@
 
    非常规类加载机制：ContextClassCloader，WebAppClassLoader等
 
-7. 反射
+   jar的加载及魔术
+
+   Arrays.equals(buffer, JAR_MAGIC)
+
+   URL
+
+7. 反射：博大精深……
 
    反射基本知识
 
-   Type与Class
+   Type与Class，Type的继承体系
 
    Iterable和Iterator
+
+   反射对象的isAccessable，参考http://www.th7.cn/Program/java/201608/919544.shtml
+
+   Method.isBridge参考http://blog.csdn.net/mhmyqn/article/details/47342577
+
+   泛型常用API，getGenericType，getDeclaringClass
 
 8. 数据源
 

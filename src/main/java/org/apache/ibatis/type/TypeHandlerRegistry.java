@@ -39,6 +39,7 @@ import org.apache.ibatis.io.Resources;
 
 /**
  * 类型处理器注册表
+ * MARK 重点类
  */
 public final class TypeHandlerRegistry {
 
@@ -46,7 +47,9 @@ public final class TypeHandlerRegistry {
     private final Map<JdbcType, TypeHandler<?>> JDBC_TYPE_HANDLER_MAP = new EnumMap<JdbcType, TypeHandler<?>>(JdbcType.class);
 
     //[JavaType-处理器]
-    //TODO 一对多
+    /**
+     * TODO
+     */
     private final Map<Type, Map<JdbcType, TypeHandler<?>>> TYPE_HANDLER_MAP = new HashMap<Type, Map<JdbcType, TypeHandler<?>>>();
 
     //维护了一个未知类型的处理器
@@ -221,13 +224,14 @@ public final class TypeHandlerRegistry {
                 handler = pickSoleHandler(jdbcHandlerMap);
             }
         }
+        //如果注册表中不存在，且是枚举类型。注意：在注册表默认注册项中没有枚举类型处理器，是因为JavaType-JdbcType中没有明显的枚举映射关系
         if (handler == null && type != null && type instanceof Class && Enum.class.isAssignableFrom((Class<?>) type)) {
             handler = new EnumTypeHandler((Class<?>) type);
         }
         // type drives generics here
         return (TypeHandler<T>) handler;
     }
-
+    //如果只注册了一个处理器，则返回这个；当注册多个时，就返回null，因为该方法是在jdbcHandlerMap.get(jdbcType)为空的情况下调用的。但是感觉这个用法比较奇怪
     private TypeHandler<?> pickSoleHandler(Map<JdbcType, TypeHandler<?>> jdbcHandlerMap) {
         TypeHandler<?> soleHandler = null;
         for (TypeHandler<?> handler : jdbcHandlerMap.values()) {
@@ -323,6 +327,7 @@ public final class TypeHandlerRegistry {
      * @param handler 处理器类型
      */
     private void register(Type javaType, JdbcType jdbcType, TypeHandler<?> handler) {
+        //如果javaType为空，则只注册处理器；否则才进行Java-Jdbc-处理器的关联
         if (javaType != null) {
             Map<JdbcType, TypeHandler<?>> map = TYPE_HANDLER_MAP.get(javaType);
             if (map == null) {
