@@ -28,6 +28,11 @@ import java.util.Arrays;
 /**
  * @author Iwao AVE!
  */
+
+/**
+ * Type类型解析器，主要类属性和方法的参数类型
+ * MARK
+ */
 public class TypeParameterResolver {
 
     /**
@@ -73,14 +78,24 @@ public class TypeParameterResolver {
         return result;
     }
 
+    /**
+     * 解析Type类型
+     * @param type 被解析的Type实例
+     * @param srcType Type父类
+     * @param declaringClass Type的声明类
+     * @return 解析为运行时类型
+     */
     private static Type resolveType(Type type, Type srcType, Class<?> declaringClass) {
         if (type instanceof TypeVariable) {
+            //<K, V>
             return resolveTypeVar((TypeVariable<?>) type, srcType, declaringClass);
         } else if (type instanceof ParameterizedType) {
+            // List<String>
             return resolveParameterizedType((ParameterizedType) type, srcType, declaringClass);
         } else if (type instanceof GenericArrayType) {
             return resolveGenericArrayType((GenericArrayType) type, srcType, declaringClass);
         } else {
+            //非泛型类型
             return type;
         }
     }
@@ -103,7 +118,9 @@ public class TypeParameterResolver {
     }
 
     private static ParameterizedType resolveParameterizedType(ParameterizedType parameterizedType, Type srcType, Class<?> declaringClass) {
+        //原始类型
         Class<?> rawType = (Class<?>) parameterizedType.getRawType();
+        //泛型参数
         Type[] typeArgs = parameterizedType.getActualTypeArguments();
         Type[] args = new Type[typeArgs.length];
         for (int i = 0; i < typeArgs.length; i++) {
@@ -174,7 +191,7 @@ public class TypeParameterResolver {
         return Object.class;
     }
 
-    //扫描父类类型
+    //扫描父类类型，类型解析核心方法
     private static Type scanSuperTypes(TypeVariable<?> typeVar, Type srcType, Class<?> declaringClass, Class<?> clazz, Type superclass) {
         Type result = null;
         if (superclass instanceof ParameterizedType) {
@@ -215,6 +232,9 @@ public class TypeParameterResolver {
         super();
     }
 
+    /**
+     * 泛型类型默认实现，例如List<String>，则rawType=List，actualTypeArguments=[String]
+     */
     static class ParameterizedTypeImpl implements ParameterizedType {
         private Class<?> rawType;
 
@@ -250,6 +270,9 @@ public class TypeParameterResolver {
         }
     }
 
+    /**
+     * 通配符类型默认实现，如? extends Number
+     */
     static class WildcardTypeImpl implements WildcardType {
         private Type[] lowerBounds;
 
@@ -272,6 +295,9 @@ public class TypeParameterResolver {
         }
     }
 
+    /**
+     * 泛型数组类型默认实现
+     */
     static class GenericArrayTypeImpl implements GenericArrayType {
         private Type genericComponentType;
 
