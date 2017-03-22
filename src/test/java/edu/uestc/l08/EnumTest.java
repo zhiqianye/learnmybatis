@@ -11,31 +11,31 @@ public class EnumTest {
 
     @Test
     public void testOrdinal() throws Exception {
-        System.out.println(Type.A.ordinal());
-        System.out.println(Type.B.ordinal());
-        System.out.println(Type.C.ordinal());
+        System.out.println(EType.A.ordinal());
+        System.out.println(EType.B.ordinal());
+        System.out.println(EType.C.ordinal());
 
     }
 
     @Test
     public void testEnumConstants() throws Exception {
-        Type[] enumConstants = Type.class.getEnumConstants();
+        EType[] enumConstants = EType.class.getEnumConstants();
         System.out.println(Arrays.toString(enumConstants));
 
     }
 
     @Test
     public void testGetName() throws Exception {
-        System.out.println(Type.A.name());
+        System.out.println(EType.A.name());
 
     }
 
     @Test
     public void testValueOf() throws Exception {
-        System.out.println(Enum.valueOf(Type.class, "A"));
+        System.out.println(Enum.valueOf(EType.class, "A"));
 
     }
 }
-enum Type{
+enum EType {
     A,B,C
 }

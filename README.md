@@ -74,6 +74,8 @@
 
    泛型常用API，getGenericType，getDeclaringClass
 
+   Set的toArray方法很奇特
+
 8. 数据源
 
 9. 事务

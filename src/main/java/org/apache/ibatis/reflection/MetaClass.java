@@ -36,6 +36,8 @@ import org.apache.ibatis.reflection.property.PropertyTokenizer;
 public class MetaClass {
 
     private ReflectorFactory reflectorFactory;
+
+    //方法基本都是再次委派给这个反射器
     private Reflector reflector;
 
     private MetaClass(Class<?> type, ReflectorFactory reflectorFactory) {
@@ -44,7 +46,7 @@ public class MetaClass {
     }
 
     public static MetaClass forClass(Class<?> type, ReflectorFactory reflectorFactory) {
-        //生成MetaClass的工具类
+        //生成MetaClass的工具方法
         return new MetaClass(type, reflectorFactory);
     }
 
@@ -54,6 +56,7 @@ public class MetaClass {
         return MetaClass.forClass(propType, reflectorFactory);
     }
 
+    //查找属性，如果带有子属性，则递归查找
     public String findProperty(String name) {
         StringBuilder prop = buildProperty(name, new StringBuilder());
         return prop.length() > 0 ? prop.toString() : null;
@@ -74,6 +77,7 @@ public class MetaClass {
         return reflector.getSetablePropertyNames();
     }
 
+    //获取setter参数类型，name是可具有子属性的属性描述
     public Class<?> getSetterType(String name) {
         PropertyTokenizer prop = new PropertyTokenizer(name);
         if (prop.hasNext()) {
@@ -102,6 +106,7 @@ public class MetaClass {
     private Class<?> getGetterType(PropertyTokenizer prop) {
         Class<?> type = reflector.getGetterType(prop.getName());
         if (prop.getIndex() != null && Collection.class.isAssignableFrom(type)) {
+            //如果是集合，则返回集合原生类型
             Type returnType = getGenericGetterType(prop.getName());
             if (returnType instanceof ParameterizedType) {
                 Type[] actualTypeArguments = ((ParameterizedType) returnType).getActualTypeArguments();
@@ -180,6 +185,7 @@ public class MetaClass {
         return reflector.getSetInvoker(name);
     }
 
+    //构造属性信息，样式为abc.def.gh
     private StringBuilder buildProperty(String name, StringBuilder builder) {
         PropertyTokenizer prop = new PropertyTokenizer(name);
         if (prop.hasNext()) {

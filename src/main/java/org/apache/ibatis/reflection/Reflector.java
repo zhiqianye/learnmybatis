@@ -60,7 +60,7 @@ public class Reflector {
     private Map<String, Class<?>> setTypes = new HashMap<String, Class<?>>();
     private Map<String, Class<?>> getTypes = new HashMap<String, Class<?>>();
     private Constructor<?> defaultConstructor;
-
+    //大小写不敏感的map
     private Map<String, String> caseInsensitivePropertyMap = new HashMap<String, String>();
 
     public Reflector(Class<?> clazz) {
@@ -71,6 +71,7 @@ public class Reflector {
         addFields(clazz);
         readablePropertyNames = getMethods.keySet().toArray(new String[getMethods.keySet().size()]);
         writeablePropertyNames = setMethods.keySet().toArray(new String[setMethods.keySet().size()]);
+        //key为大写
         for (String propName : readablePropertyNames) {
             caseInsensitivePropertyMap.put(propName.toUpperCase(Locale.ENGLISH), propName);
         }
@@ -498,6 +499,7 @@ public class Reflector {
     }
 
     public String findPropertyName(String name) {
+        //转化为大写进行查找
         return caseInsensitivePropertyMap.get(name.toUpperCase(Locale.ENGLISH));
     }
 }
