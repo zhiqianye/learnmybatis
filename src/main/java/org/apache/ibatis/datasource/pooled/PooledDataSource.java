@@ -345,6 +345,7 @@ public class PooledDataSource implements DataSource {
         return state;
     }
 
+    //组装连接类型码url + username + password的哈希码
     private int assembleConnectionTypeCode(String url, String username, String password) {
         return ("" + url + username + password).hashCode();
     }
@@ -387,7 +388,7 @@ public class PooledDataSource implements DataSource {
             }
         }
     }
-
+    //命名方式可知，像栈一样存储连接
     private PooledConnection popConnection(String username, String password) throws SQLException {
         boolean countedWait = false;
         PooledConnection conn = null;
@@ -497,6 +498,10 @@ public class PooledDataSource implements DataSource {
      * @param conn - the connection to check
      * @return True if the connection is still usable
      */
+
+    /**
+     * 检查一个连接是否仍然可用
+     */
     protected boolean pingConnection(PooledConnection conn) {
         boolean result = true;
 
@@ -551,6 +556,10 @@ public class PooledDataSource implements DataSource {
      *
      * @param conn - the pooled connection to unwrap
      * @return The 'real' connection
+     */
+
+    /**
+     * 解封一个PooledConnection，返回它的被代理connection对象
      */
     public static Connection unwrapConnection(Connection conn) {
         if (Proxy.isProxyClass(conn.getClass())) {

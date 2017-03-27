@@ -1,4 +1,4 @@
-#learnmybatis
+# learnmybatis
 
 ## 顺序与知识点
 
@@ -85,6 +85,8 @@
 8. 数据源
 
    动态代理
+
+   Proxy
 
 9. 事务
 
