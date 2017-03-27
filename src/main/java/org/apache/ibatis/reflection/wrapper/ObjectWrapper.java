@@ -26,7 +26,7 @@ import org.apache.ibatis.reflection.property.PropertyTokenizer;
  */
 
 /**
- * 对象包装器
+ * 对象包装器，从而对Object的常用操作，都可以转换到ObjectWrapper上
  */
 public interface ObjectWrapper {
 

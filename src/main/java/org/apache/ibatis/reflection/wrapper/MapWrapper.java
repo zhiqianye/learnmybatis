@@ -31,6 +31,7 @@ import org.apache.ibatis.reflection.property.PropertyTokenizer;
  */
 public class MapWrapper extends BaseWrapper {
 
+    //对象属性名-对象属性值
     private Map<String, Object> map;
 
     public MapWrapper(MetaObject metaObject, Map<String, Object> map) {
@@ -114,6 +115,7 @@ public class MapWrapper extends BaseWrapper {
         }
     }
 
+    //TODO 为什么直接返回true？
     @Override
     public boolean hasSetter(String name) {
         return true;

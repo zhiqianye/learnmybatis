@@ -50,7 +50,7 @@ public class MetaObject {
         this.objectWrapperFactory = objectWrapperFactory;
         this.reflectorFactory = reflectorFactory;
 
-        //支持map，collection和javaBean三种类型的包装
+        //wrapper类包装了map，collection和javaBean三种类型
         if (object instanceof ObjectWrapper) {
             this.objectWrapper = (ObjectWrapper) object;
         } else if (objectWrapperFactory.hasWrapperFor(object)) {
@@ -90,8 +90,6 @@ public class MetaObject {
     }
 
     public String findProperty(String propName, boolean useCamelCaseMapping) {
-        //看起来像是对包装器的分装
-        //FIXME
         return objectWrapper.findProperty(propName, useCamelCaseMapping);
     }
 
@@ -118,7 +116,7 @@ public class MetaObject {
     public boolean hasGetter(String name) {
         return objectWrapper.hasGetter(name);
     }
-
+    //设置被代理的对象属性值，如果包括子属性，则递归查找直到找到该叶子属性
     public Object getValue(String name) {
         PropertyTokenizer prop = new PropertyTokenizer(name);
         if (prop.hasNext()) {
@@ -151,7 +149,7 @@ public class MetaObject {
         }
     }
 
-    //
+    //封装对象的属性为新的MetaObject
     public MetaObject metaObjectForProperty(String name) {
         Object value = getValue(name);
         return MetaObject.forObject(value, objectFactory, objectWrapperFactory, reflectorFactory);

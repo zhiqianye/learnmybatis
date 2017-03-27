@@ -27,7 +27,7 @@ import java.util.Map;
  */
 
 /**
- * 基本对象包装器，包装的是MetaObject，而不是Object ？
+ * 基本对象包装器，包装的是MetaObject，而不是Object。
  *
  */
 public abstract class BaseWrapper implements ObjectWrapper {

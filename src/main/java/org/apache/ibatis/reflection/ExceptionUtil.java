@@ -39,7 +39,7 @@ public class ExceptionUtil {
      */
     public static Throwable unwrapThrowable(Throwable wrapped) {
         Throwable unwrapped = wrapped;
-        //while(true)没有任何循环作用
+        //如果是InvocationTargetException和UndeclaredThrowableException解封装
         while (true) {
             // 如果是InvocationTargetException或者UndeclaredThrowableException实例
             // 则获取它的[异常原因]属性
