@@ -16,14 +16,13 @@
 package org.apache.ibatis.session;
 
 /**
- * @author Clinton Begin
+ * @author Eduardo Macarron
  */
 /**
- * 结果处理器
- *
+ * 本地缓存范围
+ * 默认值为 SESSION，这种情况下会缓存一个会话中执行的所有查询。
+ * 若设置值为 STATEMENT，本地会话仅用在语句执行上，对相同 SqlSession 的不同调用将不会共享数据。
  */
-public interface ResultHandler<T> {
-    //处理结果上下文
-    void handleResult(ResultContext<? extends T> resultContext);
-
+public enum LocalCacheScope {
+    SESSION,STATEMENT
 }

@@ -19,11 +19,18 @@ package org.apache.ibatis.session;
  * @author Clinton Begin
  */
 /**
- * 结果处理器
- *
+ * 结果上下文
  */
-public interface ResultHandler<T> {
-    //处理结果上下文
-    void handleResult(ResultContext<? extends T> resultContext);
+public interface ResultContext<T> {
+    //获取结果
+    T getResultObject();
+
+    //获取结果数量
+    int getResultCount();
+
+    //是否已经停止？
+    boolean isStopped();
+
+    void stop();
 
 }
