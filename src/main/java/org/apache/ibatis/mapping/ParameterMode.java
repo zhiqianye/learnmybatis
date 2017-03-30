@@ -13,34 +13,15 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package org.apache.ibatis.session;
+package org.apache.ibatis.mapping;
 
 /**
- * Specifies if and how MyBatis should automatically map columns to fields/properties.
- *
- * @author Eduardo Macarron
+ * @author Clinton Begin
  */
 
 /**
- * 自动映射
+ * TODO 参数模式？
  */
-public enum AutoMappingBehavior {
-
-    /**
-     * Disables auto-mapping.
-     */
-    //禁止自动映射
-    NONE,
-
-    /**
-     * Will only auto-map results with no nested result mappings defined inside.
-     */
-    // 只会自动映射没有定义嵌套结果集映射的结果集
-    PARTIAL,
-
-    /**
-     * Will auto-map result mappings of any complexity (containing nested or otherwise).
-     */
-    //自动映射任意复杂的结果集（无论是否嵌套）
-    FULL
+public enum ParameterMode {
+    IN, OUT, INOUT
 }

@@ -10,9 +10,11 @@ package org.apache.ibatis.executor;
 public class ErrorContext {
 
     private static final String LINE_SEPARATOR = System.getProperty("line.separator","\n");
+    //当前错误上下文
     private static final ThreadLocal<ErrorContext> LOCAL = new ThreadLocal<ErrorContext>();
 
     private ErrorContext stored;
+    //错误信息项
     private String resource;
     private String activity;
     private String object;
@@ -23,6 +25,7 @@ public class ErrorContext {
     private ErrorContext() {
     }
 
+    //线程隔离
     public static ErrorContext instance() {
         ErrorContext context = LOCAL.get();
         if (context == null) {
@@ -32,12 +35,14 @@ public class ErrorContext {
         return context;
     }
 
+    //保留当前错误上下文
     public ErrorContext store() {
         stored = this;
         LOCAL.set(new ErrorContext());
         return LOCAL.get();
     }
 
+    //读取之前保存的错误上下文
     public ErrorContext recall() {
         if (stored != null) {
             LOCAL.set(stored);
@@ -45,6 +50,8 @@ public class ErrorContext {
         }
         return LOCAL.get();
     }
+
+    //以下是错误信息设置
 
     public ErrorContext resource(String resource) {
         this.resource = resource;
@@ -76,6 +83,7 @@ public class ErrorContext {
         return this;
     }
 
+    //重置
     public ErrorContext reset() {
         resource = null;
         activity = null;
