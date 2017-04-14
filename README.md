@@ -84,6 +84,10 @@
 
    Collections.unmodifiableSortedMap
 
+   PropertyDescriptor
+
+   Arrays.deepToString
+
 8. 数据源
 
    动态代理
@@ -91,6 +95,8 @@
    Proxy
 
    JNDI
+
+   DriverManager.registerDriver
 
 9. 事务
 
@@ -102,9 +108,10 @@
 
    游标
 
-11.  jdbc单元测试工具
+11.   jdbc单元测试工具
 
-    SQL的逃逸字符
+   SQL的逃逸字符
+
 
 12.  构建
 

@@ -138,6 +138,7 @@ public class ScriptRunner {
         }
     }
 
+	//执行行脚本，没输入一行，只要找到了命令结束符";"则立即执行
     private void executeLineByLine(Reader reader) {
         StringBuilder command = new StringBuilder();
         try {
@@ -176,6 +177,7 @@ public class ScriptRunner {
 
     private void commitConnection() {
         try {
+            //不是自动提交，则提交
             if (!connection.getAutoCommit()) {
                 connection.commit();
             }
@@ -194,6 +196,7 @@ public class ScriptRunner {
         }
     }
 
+	//校验是否命令行有遗留没有执行到
     private void checkForMissingLineTerminator(StringBuilder command) {
         if (command != null && command.toString().trim().length() > 0) {
             throw new RuntimeSqlException("Line missing end-of-line terminator (" + delimiter + ") => " + command);
@@ -203,6 +206,7 @@ public class ScriptRunner {
     private StringBuilder handleLine(StringBuilder command, String line) throws SQLException, UnsupportedEncodingException {
         String trimmedLine = line.trim();
         if (lineIsComment(trimmedLine)) {
+			//如果是注释
             final String cleanedString = trimmedLine.substring(2).trim().replaceFirst("//", "");
             if(cleanedString.toUpperCase().startsWith("@DELIMITER")) {
                 delimiter = cleanedString.substring(11,12);
@@ -210,6 +214,7 @@ public class ScriptRunner {
             }
             println(trimmedLine);
         } else if (commandReadyToExecute(trimmedLine)) {
+			//当前行找到了命令结束符";"，则将结束之前的语句添加并执行
             command.append(line.substring(0, line.lastIndexOf(delimiter)));
             command.append(LINE_SEPARATOR);
             println(command);
@@ -222,6 +227,7 @@ public class ScriptRunner {
         return command;
     }
 
+	//这一行是否为注释
     private boolean lineIsComment(String trimmedLine) {
         return trimmedLine.startsWith("//") || trimmedLine.startsWith("--");
     }
@@ -243,6 +249,7 @@ public class ScriptRunner {
         if (stopOnError) {
             hasResults = statement.execute(sql);
             if (throwWarning) {
+				//Oracle环境中，创建存储过程，函数等，返回warning而不是抛出异常。这种情况下获取执行中的warning，有就抛出
                 // In Oracle, CRATE PROCEDURE, FUNCTION, etc. returns warning
                 // instead of throwing exception if there is compilation error.
                 SQLWarning warning = statement.getWarnings();
@@ -266,19 +273,23 @@ public class ScriptRunner {
         }
     }
 
+	//如果有结果，则打印结果集；否则什么都不做
     private void printResults(Statement statement, boolean hasResults) {
         try {
             if (hasResults) {
                 ResultSet rs = statement.getResultSet();
                 if (rs != null) {
+					//获取行元数据
                     ResultSetMetaData md = rs.getMetaData();
                     int cols = md.getColumnCount();
                     for (int i = 0; i < cols; i++) {
+						//打印表格头部
                         String name = md.getColumnLabel(i + 1);
                         print(name + "\t");
                     }
                     println("");
                     while (rs.next()) {
+						//打印条目的每一列
                         for (int i = 0; i < cols; i++) {
                             String value = rs.getString(i + 1);
                             print(value + "\t");
