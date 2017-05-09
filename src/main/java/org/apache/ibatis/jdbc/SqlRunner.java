@@ -45,6 +45,7 @@ public class SqlRunner {
 
 	private Connection connection;
 	private TypeHandlerRegistry typeHandlerRegistry;
+	//TODO ？
 	private boolean useGeneratedKeySupport;
 
 	public SqlRunner(Connection connection) {
@@ -182,6 +183,7 @@ public class SqlRunner {
 	 * @param sql The SQL
 	 * @throws SQLException If statement preparation or execution fails
 	 */
+	// 使用Statement运行传入sql
 	public void run(String sql) throws SQLException {
 		Statement stmt = connection.createStatement();
 		try {
@@ -195,6 +197,7 @@ public class SqlRunner {
 		}
 	}
 
+	//关闭连接
 	public void closeConnection() {
 		try {
 			connection.close();
@@ -203,7 +206,7 @@ public class SqlRunner {
 		}
 	}
 
-	//设置参数
+	//设置参数，全部是通过TypeHandler来处理的
 	private void setParameters(PreparedStatement ps, Object... args) throws SQLException {
 		for (int i = 0, n = args.length; i < n; i++) {
 			if (args[i] == null) {
@@ -221,6 +224,7 @@ public class SqlRunner {
 		}
 	}
 
+	//从ResultSet中获取结果（结果已经被类型处理器处理）
 	private List<Map<String, Object>> getResults(ResultSet rs) throws SQLException {
 		try {
 			List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
@@ -228,7 +232,9 @@ public class SqlRunner {
 			List<TypeHandler<?>> typeHandlers = new ArrayList<TypeHandler<?>>();
 			ResultSetMetaData rsmd = rs.getMetaData();
 			for (int i = 0, n = rsmd.getColumnCount(); i < n; i++) {
+				//获取列名
 				columns.add(rsmd.getColumnLabel(i + 1));
+				//获取类型处理器
 				try {
 					Class<?> type = Resources.classForName(rsmd.getColumnClassName(i + 1));
 					TypeHandler<?> typeHandler = typeHandlerRegistry.getTypeHandler(type);
