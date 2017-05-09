@@ -16,12 +16,18 @@
 package org.apache.ibatis.mapping;
 
 /**
+ * Represents the content of a mapped statement read from an XML file or an annotation.
+ * It creates the SQL that will be passed to the database out of the input parameter received from the user.
+ *
  * @author Clinton Begin
  */
 
 /**
- * TODO 参数模式？给SP用？
+ * 代表从xml文件中或者注释中读到的源SQL
+ * 它用来接收来自用户的参数输入，并创建数据库可执行的SQL。
  */
-public enum ParameterMode {
-    IN, OUT, INOUT
+public interface SqlSource {
+
+	BoundSql getBoundSql(Object parameterObject);
+
 }

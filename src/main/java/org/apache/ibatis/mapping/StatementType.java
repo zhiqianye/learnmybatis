@@ -20,8 +20,8 @@ package org.apache.ibatis.mapping;
  */
 
 /**
- * TODO 参数模式？给SP用？
+ * Statement类型
  */
-public enum ParameterMode {
-    IN, OUT, INOUT
+public enum StatementType {
+	STATEMENT, PREPARED, CALLABLE
 }

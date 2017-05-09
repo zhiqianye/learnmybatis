@@ -20,8 +20,9 @@ package org.apache.ibatis.mapping;
  */
 
 /**
- * TODO 参数模式？给SP用？
+ * 结果标记
+ * TODO ？
  */
-public enum ParameterMode {
-    IN, OUT, INOUT
+public enum ResultFlag {
+	ID, CONSTRUCTOR
 }

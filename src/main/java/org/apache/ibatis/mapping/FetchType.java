@@ -16,12 +16,13 @@
 package org.apache.ibatis.mapping;
 
 /**
- * @author Clinton Begin
+ * @author Eduardo Macarron
  */
 
 /**
- * TODO 参数模式？给SP用？
+ * 取数据的方式类型
+ * TODO 有何区别？
  */
-public enum ParameterMode {
-    IN, OUT, INOUT
+public enum FetchType {
+	LAZY, EAGER, DEFAULT
 }

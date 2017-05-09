@@ -20,8 +20,9 @@ public class Configuration {
     private ReflectorFactory reflectorFactory;
     private Environment environment;
     private ExecutorType defaultExecutorType;
+	private boolean lazyLoadingEnabled;
 
-    public boolean isUseActualParamName() {
+	public boolean isUseActualParamName() {
         return useActualParamName;
     }
 
@@ -64,4 +65,8 @@ public class Configuration {
     public ExecutorType getDefaultExecutorType() {
         return defaultExecutorType;
     }
+
+	public boolean isLazyLoadingEnabled() {
+		return lazyLoadingEnabled;
+	}
 }

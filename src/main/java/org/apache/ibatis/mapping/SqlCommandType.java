@@ -20,8 +20,9 @@ package org.apache.ibatis.mapping;
  */
 
 /**
- * TODO 参数模式？给SP用？
+ * SQL命令类型
+ * TODO UNKNOWN和FLUSH
  */
-public enum ParameterMode {
-    IN, OUT, INOUT
+public enum SqlCommandType {
+	UNKNOWN, INSERT, UPDATE, DELETE, SELECT, FLUSH;
 }

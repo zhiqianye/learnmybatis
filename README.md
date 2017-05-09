@@ -2,13 +2,13 @@
 
 ## 顺序与知识点
 
-1. 日志先行
+1. log
 
    ​slf4j设计模式
 
-2. 异常
+2. exception
 
-3. 缓存
+3. cache
 
    ReentrantLock
 
@@ -20,7 +20,7 @@
 
    ​
 
-4. 解析
+4. parsing
 
    SAX&DOM
 
@@ -88,7 +88,7 @@
 
    Arrays.deepToString
 
-8. 数据源
+8. datasource
 
    动态代理
 
@@ -100,7 +100,7 @@
 
 9. 事务
 
-10. 会话
+10. session
 
   事务隔离级别
 
@@ -108,7 +108,7 @@
 
   游标
 
-11.   jdbc单元测试工具
+11.   jdbc
 
    SQL的逃逸字符
 
@@ -117,11 +117,17 @@
    ​
 
 
-12.  构建
-
-13.  映射
+12.  mapping
 
    构造者模式
+
+   ParameterMode？
+
+   ResultSet游标使用，移动方向
+
+13.  builder
+
+   ​
 
 14. 脚本
 

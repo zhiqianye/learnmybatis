@@ -15,13 +15,27 @@
  */
 package org.apache.ibatis.mapping;
 
+import java.sql.SQLException;
+import java.util.Properties;
+
+import javax.sql.DataSource;
+
 /**
- * @author Clinton Begin
+ * Should return an id to identify the type of this database.
+ * That id can be used later on to build different queries for each database type
+ * This mechanism enables supporting multiple vendors or versions
+ *
+ * @author Eduardo Macarron
  */
 
 /**
- * TODO 参数模式？给SP用？
+ * 数据库的ID提供商
  */
-public enum ParameterMode {
-    IN, OUT, INOUT
+public interface DatabaseIdProvider {
+
+	//设置提供商属性
+	void setProperties(Properties p);
+
+	//获取指定数据源的ID
+	String getDatabaseId(DataSource dataSource) throws SQLException;
 }
