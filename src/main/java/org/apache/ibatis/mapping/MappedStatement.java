@@ -297,6 +297,7 @@ public final class MappedStatement {
 		return resultSets;
 	}
 
+	//本质是获取SqlSource的BoundSql，并加入了其他业务判断
 	public BoundSql getBoundSql(Object parameterObject) {
 		BoundSql boundSql = sqlSource.getBoundSql(parameterObject);
 		List<ParameterMapping> parameterMappings = boundSql.getParameterMappings();
