@@ -3,10 +3,12 @@ package org.apache.ibatis.session;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.Environment;
 import org.apache.ibatis.mapping.MappedStatement;
+import org.apache.ibatis.mapping.ResultMap;
 import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.reflection.ReflectorFactory;
 import org.apache.ibatis.reflection.factory.ObjectFactory;
 import org.apache.ibatis.reflection.wrapper.ObjectWrapperFactory;
+import org.apache.ibatis.scripting.LanguageDriver;
 import org.apache.ibatis.transaction.Transaction;
 import org.apache.ibatis.type.TypeHandlerRegistry;
 
@@ -21,6 +23,9 @@ public class Configuration {
     private Environment environment;
     private ExecutorType defaultExecutorType;
 	private boolean lazyLoadingEnabled;
+	private boolean useGeneratedKeys;
+	private String logPrefix;
+	private LanguageDriver defaultScriptingLanuageInstance;
 
 	public boolean isUseActualParamName() {
         return useActualParamName;
@@ -68,5 +73,25 @@ public class Configuration {
 
 	public boolean isLazyLoadingEnabled() {
 		return lazyLoadingEnabled;
+	}
+
+	public ResultMap getResultMap(String rmId) {
+		return null;
+	}
+
+	public boolean isUseGeneratedKeys() {
+		return useGeneratedKeys;
+	}
+
+	public String getLogPrefix() {
+		return logPrefix;
+	}
+
+	public LanguageDriver getDefaultScriptingLanuageInstance() {
+		return defaultScriptingLanuageInstance;
+	}
+
+	public MetaObject newMetaObject(Object parameter) {
+		return null;
 	}
 }

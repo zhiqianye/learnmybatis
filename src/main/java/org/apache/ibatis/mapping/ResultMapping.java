@@ -45,7 +45,9 @@ public class ResultMapping {
 	private String nestedQueryId;
 	private Set<String> notNullColumns;
 	private String columnPrefix;
+	//结果标记集合？
 	private List<ResultFlag> flags;
+	//混合结果？
 	private List<ResultMapping> composites;
 	private String resultSet;
 	private String foreignColumn;
@@ -54,6 +56,7 @@ public class ResultMapping {
 	ResultMapping() {
 	}
 
+	//静态内部类，建造者模式
 	public static class Builder {
 		private ResultMapping resultMapping = new ResultMapping();
 
@@ -139,6 +142,7 @@ public class ResultMapping {
 
 		public ResultMapping build() {
 			// lock down collections
+			//flags和composites只读
 			resultMapping.flags = Collections.unmodifiableList(resultMapping.flags);
 			resultMapping.composites = Collections.unmodifiableList(resultMapping.composites);
 			resolveTypeHandler();
@@ -146,6 +150,7 @@ public class ResultMapping {
 			return resultMapping;
 		}
 
+		//校验参数
 		private void validate() {
 			// Issue #697: cannot define both nestedQueryId and nestedResultMapId
 			if (resultMapping.nestedQueryId != null && resultMapping.nestedResultMapId != null) {
@@ -174,7 +179,9 @@ public class ResultMapping {
 			}
 		}
 
+		//解析类型处理器
 		private void resolveTypeHandler() {
+			//typeHandler为空时解析，否则使用非空typeHandler
 			if (resultMapping.typeHandler == null && resultMapping.javaType != null) {
 				Configuration configuration = resultMapping.configuration;
 				TypeHandlerRegistry typeHandlerRegistry = configuration.getTypeHandlerRegistry();

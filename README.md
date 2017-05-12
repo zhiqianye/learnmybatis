@@ -18,6 +18,8 @@
 
    强、软、弱、虚引用
 
+   包装器模式，多重包装
+
    ​
 
 4. parsing
@@ -119,11 +121,15 @@
 
 12.  mapping
 
-   构造者模式
+   构造者模式，使用很频繁，通常是在属性数量多的情况下使用
 
    ParameterMode？
 
    ResultSet游标使用，移动方向
+
+   nestedQueryId和nestedResultMapId是啥？
+
+   映射中column是做啥用的？
 
 13.  builder
 

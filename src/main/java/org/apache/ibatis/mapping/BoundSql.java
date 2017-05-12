@@ -44,11 +44,11 @@ public class BoundSql {
     private String sql;
     //多个绑定参数的映射关系
     private List<ParameterMapping> parameterMappings;
-    //？
+    //参数值
     private Object parameterObject;
-    //额外参数？
+    //额外参数
     private Map<String, Object> additionalParameters;
-    //元对象？
+    //additionalParameters的元对象
     private MetaObject metaParameters;
 
     public BoundSql(Configuration configuration, String sql, List<ParameterMapping> parameterMappings, Object parameterObject) {
@@ -74,6 +74,7 @@ public class BoundSql {
     public boolean hasAdditionalParameter(String name) {
         PropertyTokenizer prop = new PropertyTokenizer(name);
         String indexedName = prop.getIndexedName();
+		//map中查找name的第一属性
         return additionalParameters.containsKey(indexedName);
     }
 
