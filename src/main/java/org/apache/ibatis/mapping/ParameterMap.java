@@ -23,6 +23,10 @@ import org.apache.ibatis.session.Configuration;
 /**
  * @author Clinton Begin
  */
+
+/**
+ * 即将废弃的元素？
+ */
 public class ParameterMap {
 
 	private String id;

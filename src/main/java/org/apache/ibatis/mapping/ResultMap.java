@@ -92,6 +92,7 @@ public class ResultMap {
 				if (column != null) {
 					resultMap.mappedColumns.add(column.toUpperCase(Locale.ENGLISH));
 				} else if (resultMapping.isCompositeResult()) {
+					//多列
 					for (ResultMapping compositeResultMapping : resultMapping.getComposites()) {
 						final String compositeColumn = compositeResultMapping.getColumn();
 						if (compositeColumn != null) {
@@ -100,11 +101,14 @@ public class ResultMap {
 					}
 				}
 				if (resultMapping.getFlags().contains(ResultFlag.CONSTRUCTOR)) {
+					//构造器映射
 					resultMap.constructorResultMappings.add(resultMapping);
 				} else {
+					//属性映射
 					resultMap.propertyResultMappings.add(resultMapping);
 				}
 				if (resultMapping.getFlags().contains(ResultFlag.ID)) {
+					//id映射
 					resultMap.idResultMappings.add(resultMapping);
 				}
 			}

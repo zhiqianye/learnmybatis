@@ -21,7 +21,7 @@ package org.apache.ibatis.mapping;
 
 /**
  * 取数据的方式类型
- * TODO 有何区别？
+ * 用于配置级联查询中
  */
 public enum FetchType {
 	LAZY, EAGER, DEFAULT

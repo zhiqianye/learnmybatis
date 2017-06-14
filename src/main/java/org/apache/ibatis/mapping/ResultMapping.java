@@ -15,15 +15,15 @@
  */
 package org.apache.ibatis.mapping;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.TypeHandler;
 import org.apache.ibatis.type.TypeHandlerRegistry;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author Clinton Begin
@@ -31,15 +31,22 @@ import org.apache.ibatis.type.TypeHandlerRegistry;
 /**
  * 结果映射
  * MyBatis 中最重要最强大的元素
- * TODO
+ *
+		 <result property="probeId" column="c_probe_id"/>
+
  */
 public class ResultMapping {
 	//配置
 	private Configuration configuration;
+	//bean属性
 	private String property;
+	//列名
 	private String column;
+	//java类型
 	private Class<?> javaType;
+	//jdbc类型
 	private JdbcType jdbcType;
+	//类型处理器
 	private TypeHandler<?> typeHandler;
 	private String nestedResultMapId;
 	private String nestedQueryId;
@@ -47,7 +54,7 @@ public class ResultMapping {
 	private String columnPrefix;
 	//结果标记集合？
 	private List<ResultFlag> flags;
-	//混合结果？
+	//混合结果？级联结果
 	private List<ResultMapping> composites;
 	private String resultSet;
 	private String foreignColumn;
