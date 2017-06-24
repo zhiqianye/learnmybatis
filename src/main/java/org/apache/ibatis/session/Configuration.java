@@ -135,4 +135,8 @@ public class Configuration {
 	public ParameterMap getParameterMap(String parameterMapName) {
 		return null;
 	}
+
+	public boolean hasStatement(String statementName) {
+		return false;
+	}
 }
