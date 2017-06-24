@@ -132,7 +132,7 @@ public abstract class BaseBuilder {
 			throw new BuilderException("Type " + type.getName() + " is not a valid TypeHandler because it does not implement TypeHandler interface");
 		}
 		@SuppressWarnings( "unchecked" ) // already verified it is a TypeHandler
-				Class<? extends TypeHandler<?>> typeHandlerType = (Class<? extends TypeHandler<?>>) type;
+		Class<? extends TypeHandler<?>> typeHandlerType = (Class<? extends TypeHandler<?>>) type;
 		return resolveTypeHandler(javaType, typeHandlerType);
 	}
 
