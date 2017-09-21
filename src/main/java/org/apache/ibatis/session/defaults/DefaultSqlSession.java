@@ -49,6 +49,12 @@ import org.apache.ibatis.session.SqlSession;
 
 /**
  * SqlSession接口的默认实现，线程不安全
+ * 都是从配置对象Configuration中取出材料来，委托给执行器Executor去处理。
+ *
+ * autoCommit=false，但是没有手动commit，在sqlSession.close()时，
+ * Mybatis会将事务进行rollback()操作，然后才执行conn.close()关闭连接，
+ * 当然数据最终也就没能持久化到数据库中了。
+ *
  */
 public class DefaultSqlSession implements SqlSession {
     //配置
@@ -200,6 +206,10 @@ public class DefaultSqlSession implements SqlSession {
 
     @Override
     public int update(String statement, Object parameter) {
+		/**
+		 * 注：只要执行update操作，就设置dirty=true。insert、delete最终也是执行update操作。
+		 * 只有在执行完commit()、rollback()、close()等方法后，才会再次设置dirty=false。
+		 */
         try {
             dirty = true;
             MappedStatement ms = configuration.getMappedStatement(statement);
@@ -336,10 +346,11 @@ public class DefaultSqlSession implements SqlSession {
     private boolean isCommitOrRollbackRequired(boolean force) {
         //强制执行
         //或
-        //又脏数据且未开启自动提交时
+        //有脏数据且未开启自动提交时
         return (!autoCommit && dirty) || force;
     }
 
+	//把参数包装成Collection
     private Object wrapCollection(final Object object) {
         if (object instanceof Collection) {
             //参数若是Collection型，做collection标记

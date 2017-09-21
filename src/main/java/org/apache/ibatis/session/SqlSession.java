@@ -31,7 +31,8 @@ import org.apache.ibatis.executor.BatchResult;
  */
 
 /**
- * java调用mybatis的主要接口。通过这个接口，可以执行命令，获取映射器以及管理实务
+ * java调用mybatis的主要接口。通过这个接口，可以执行命令，获取映射器以及管理实务.
+ * 数据库的CRUD及事务处理接口
  */
 public interface SqlSession extends Closeable {
 

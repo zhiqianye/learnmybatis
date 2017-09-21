@@ -27,7 +27,7 @@ import java.sql.Connection;
  * SqlSession工厂
  */
 public interface SqlSessionFactory {
-    //打开一个SQLSession
+    //打开一个SQLSession，默认实现会自动设置autoCommit=false。
     SqlSession openSession();
 
     //打开一个SQLSession，并设置自动提交

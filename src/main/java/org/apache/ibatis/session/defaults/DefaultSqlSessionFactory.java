@@ -36,6 +36,7 @@ import org.apache.ibatis.transaction.managed.ManagedTransactionFactory;
  */
 /**
  * SqlSession工厂默认实现
+ * 通过environment对象获取事务工厂，获取事务，生成执行器，最终生成SqlSession，因此生成执行器是个关键步骤
  *
  */
 public class DefaultSqlSessionFactory implements SqlSessionFactory {

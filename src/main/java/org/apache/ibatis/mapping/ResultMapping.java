@@ -29,7 +29,7 @@ import java.util.Set;
  * @author Clinton Begin
  */
 /**
- * 结果映射
+ * 一条结果映射
  * MyBatis 中最重要最强大的元素
  *
 		 <result property="probeId" column="c_probe_id"/>

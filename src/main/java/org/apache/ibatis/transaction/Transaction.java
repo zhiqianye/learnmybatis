@@ -28,6 +28,14 @@ import java.sql.Statement;
 
 /**
  * 事务，包装了一个Connection, 包含commit,rollback,close方法
+ * Executor在执行数据库操作时，与事务的提交、回滚、关闭毫无瓜葛（方法内部不会提交、回滚事务），
+ * 需要手动显示调用commit()、rollback()、close()等方法。
+ *
+ * <br/>如果没有执行commit()，仅执行close()，会发生什么？close时会回滚
+ *
+ * <br/>如果即不commit，也不close，会发生什么？insert后，jvm结束前，如果事务隔离级别是read uncommitted，我们可以查到该条记录。
+ * jvm结束后，事务被rollback()，记录消失。通过断点debug方式，你可以看到效果。
+ *
  */
 public interface Transaction {
 

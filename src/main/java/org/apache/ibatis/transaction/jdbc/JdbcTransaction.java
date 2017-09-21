@@ -37,6 +37,8 @@ import org.apache.ibatis.transaction.TransactionException;
  */
 /**
  * 依赖于Jdbc事务的事务。它依赖于从数据源得 到的连接来管理事务范围。当autocommit开启时忽略commit和rollback操作
+ * 单独使用Mybatis时，默认的事务管理实现类，就和它的名字一样，它就是我们常说的JDBC事务的极简封装，
+ * 和编程使用mysql-connector-java-5.1.38-bin.jar事务驱动没啥差别。其极简封装，仅是让connection支持连接池而已。
  */
 public class JdbcTransaction implements Transaction {
 
@@ -47,6 +49,7 @@ public class JdbcTransaction implements Transaction {
     protected TransactionIsolationLevel level;
     protected boolean autoCommmit;
 
+	//两种构造方式，1是传入原材料生成connection，2是直接传入connection
     public JdbcTransaction(DataSource ds, TransactionIsolationLevel desiredLevel, boolean desiredAutoCommit) {
         dataSource = ds;
         level = desiredLevel;
@@ -91,10 +94,17 @@ public class JdbcTransaction implements Transaction {
     @Override
     public void close() throws SQLException {
         if (connection != null) {
+			//这个操作比较奇特
             resetAutoCommit();
             if (log.isDebugEnabled()) {
                 log.debug("Closing JDBC Connection [" + connection + "]");
             }
+			/*
+				通过生成connection代理类，来实现重回连接池的功能。
+				如果connection是普通的Connection实例，那么代码也是没有问题的，双重支持。
+				connection.close()不意味着真的要销毁conn，而是要把conn放回连接池，供下一次使用，
+				既然还要使用，自然就需要重置AutoCommit属性了。
+			 */
             connection.close();
         }
     }

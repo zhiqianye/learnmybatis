@@ -33,31 +33,47 @@ import org.apache.ibatis.transaction.Transaction;
 
 /**
  * 执行器接口
+ * 在Mybatis中，SqlSession对数据库的操作，<b>将委托给执行器Executor来完成</b>，而Executor由五鼠组成：
+ * <br/>简单鼠SimpleExecutor
+ * <br/>重用鼠ReuseExecutor
+ * <br/>批量鼠BatchExecutor
+ * <br/>缓存鼠CachingExecutor
+ * <br/>无用鼠ClosedExecutor：BaseExecutor的静态内部类
  */
 public interface Executor {
+
     //空ResultHandler
     ResultHandler NO_RESULT_HANDLER = null;
 
+	//更新
     int update(MappedStatement ms, Object parameter) throws SQLException;
 
+	//查询，待分页，缓存，和BoundSql
     <E> List<E> query(MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, CacheKey cacheKey, BoundSql boundSql) throws SQLException;
 
+	//查询，带分页
     <E> List<E> query(MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler) throws SQLException;
 
+	//
     <E> Cursor<E> queryCursor(MappedStatement ms, Object parameter, RowBounds rowBounds) throws SQLException;
 
+	//刷新批批处理语句
     List<BatchResult> flushStatements() throws SQLException;
 
+	//提交和回滚，参数是是否要强制
     void commit(boolean required) throws SQLException;
 
     void rollback(boolean required) throws SQLException;
 
+	//创建CacheKey
     CacheKey createCacheKey(MappedStatement ms, Object parameterObject, RowBounds rowBounds, BoundSql boundSql);
 
+	//判断是否缓存了
     boolean isCached(MappedStatement ms, CacheKey key);
 
     void clearLocalCache();
 
+	//延迟加载
     void deferLoad(MappedStatement ms, MetaObject resultObject, String property, CacheKey key, Class<?> targetType);
 
     Transaction getTransaction();

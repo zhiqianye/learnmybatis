@@ -30,11 +30,11 @@ import org.apache.ibatis.session.Configuration;
 public interface LanguageDriver {
 
 	/**
-	 * Creates a {@link ParameterHandler} that passes the actual parameters to the the JDBC statement.
+	 * 创建参数处理器
 	 *
-	 * @param mappedStatement The mapped statement that is being executed
-	 * @param parameterObject The input parameter object (can be null)
-	 * @param boundSql The resulting SQL once the dynamic language has been executed.
+	 * @param mappedStatement 被执行的映射Statement
+	 * @param parameterObject 输入参数
+	 * @param boundSql 动态sql解析的结果
 	 * @return
 	 * @author Frank D. Martinez [mnesarco]
 	 * @see DefaultParameterHandler
@@ -42,23 +42,23 @@ public interface LanguageDriver {
 	ParameterHandler createParameterHandler(MappedStatement mappedStatement, Object parameterObject, BoundSql boundSql);
 
 	/**
-	 * Creates an {@link SqlSource} that will hold the statement read from a mapper xml file.
-	 * It is called during startup, when the mapped statement is read from a class or an xml file.
+	 * 从xml文件中读取的，持有statement的SqlSource
+	 * 当映射Statement被从xml文件或者class中读取时触发
 	 *
-	 * @param configuration The MyBatis configuration
-	 * @param script XNode parsed from a XML file
-	 * @param parameterType input parameter type got from a mapper method or specified in the parameterType xml attribute. Can be null.
+	 * @param configuration MyBatis配置对象
+	 * @param script xml文件的XNode对象
+	 * @param parameterType 输入参数类型
 	 * @return
 	 */
 	SqlSource createSqlSource(Configuration configuration, XNode script, Class<?> parameterType);
 
 	/**
-	 * Creates an {@link SqlSource} that will hold the statement read from an annotation.
-	 * It is called during startup, when the mapped statement is read from a class or an xml file.
+	 * 从注解中中读取的，持有statement的SqlSource
+	 * 当映射Statement被从xml文件或者class中读取时触发
 	 *
-	 * @param configuration The MyBatis configuration
-	 * @param script The content of the annotation
-	 * @param parameterType input parameter type got from a mapper method or specified in the parameterType xml attribute. Can be null.
+	 * @param configuration MyBatis配置对象
+	 * @param script 注解内容
+	 * @param parameterType 输入参数类型
 	 * @return
 	 */
 	SqlSource createSqlSource(Configuration configuration, String script, Class<?> parameterType);

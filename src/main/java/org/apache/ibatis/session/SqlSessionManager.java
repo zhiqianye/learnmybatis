@@ -34,17 +34,22 @@ import org.apache.ibatis.reflection.ExceptionUtil;
  */
 /**
  * SqlSession管理器
+ * 注：SqlSessionManager似乎是废弃不使用的了，但是，它并不妨碍我们探究其源码
  */
 public class SqlSessionManager implements SqlSessionFactory, SqlSession {
+
     //用来提供SqlSession原型
     private final SqlSessionFactory sqlSessionFactory;
+
     //对sqlSessionFactory提供的SqlSession的代理（好像代理的自动提交回滚功能用不到，因为本地存储中没有SqlSession时外层抛异常，invoke执行不到）
     private final SqlSession sqlSessionProxy;
+
     //用来存储sqlSessionFactory提供的SqlSession的本地变量
     private ThreadLocal<SqlSession> localSqlSession = new ThreadLocal<SqlSession>();
 
     private SqlSessionManager(SqlSessionFactory sqlSessionFactory) {
         this.sqlSessionFactory = sqlSessionFactory;
+		// 这个proxy是重点，是JDK动态代理出来的proxy
         this.sqlSessionProxy = (SqlSession) Proxy.newProxyInstance(
                 SqlSessionFactory.class.getClassLoader(),
                 new Class[]{SqlSession.class},
@@ -346,7 +351,15 @@ public class SqlSessionManager implements SqlSessionFactory, SqlSession {
         }
     }
 
-    //动态模式，业务功能为SqlSession的拦截器
+
+
+	/**
+	 * 动态模式，业务功能为SqlSession的拦截器。动态代理的目的，是为了通过拦截器InvocationHandler，增强目标target的方法调用
+	 * 所有的调用sqlSessionProxy代理对象的CRUD及事务方法，都将经过SqlSessionInterceptor拦截器，并最终由目标对象target实际完成数据库操作。
+	 *
+	 * 说明：SqlSession的生命周期，必须严格限制在方法内部或者request范围（也称之为Thread范围），
+	 * 线程不安全，线程之间不能共享。（官方文档有明确说明）
+	 */
     private class SqlSessionInterceptor implements InvocationHandler {
         public SqlSessionInterceptor() {
             // Prevent Synthetic Access
@@ -357,12 +370,19 @@ public class SqlSessionManager implements SqlSessionFactory, SqlSession {
             final SqlSession sqlSession = SqlSessionManager.this.localSqlSession.get();
             if (sqlSession != null) {
                 try {
+					/*
+					存在线程局部变量sqlSession（不提交、不回滚、不关闭，可在线程生命周期内，
+					自定义sqlSession的提交、回滚、关闭时机，达到复用sqlSession的效果）
+					 */
                     return method.invoke(sqlSession, args);
                 } catch (Throwable t) {
                     throw ExceptionUtil.unwrapThrowable(t);
                 }
             } else {
-                //自动提交和回滚的SqlSession
+                /*
+                自动提交和回滚的SqlSession，不存在线程局部变量sqlSession，创建一个自动提交、回滚、关闭的SqlSession
+                （提交、回滚、关闭，将sqlSession的生命周期完全限定在方法内部）
+                 */
                 final SqlSession autoSqlSession = openSession();
                 try {
                     final Object result = method.invoke(autoSqlSession, args);
@@ -375,7 +395,9 @@ public class SqlSessionManager implements SqlSessionFactory, SqlSession {
                     autoSqlSession.close();
                 }
             }
-        }
+
+
+		}
     }
 
 }
