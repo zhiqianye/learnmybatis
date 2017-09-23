@@ -295,12 +295,14 @@ public abstract class BaseExecutor implements Executor {
 		}
 	}
 
+	//Executor每执行一个query或update动作，都会创建一个StatementHandler对象
 	protected abstract int doUpdate(MappedStatement ms, Object parameter)
 			throws SQLException;
 
 	protected abstract List<BatchResult> doFlushStatements(boolean isRollback)
 			throws SQLException;
 
+	//Executor每执行一个query或update动作，都会创建一个StatementHandler对象
 	protected abstract <E> List<E> doQuery(MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql)
 			throws SQLException;
 

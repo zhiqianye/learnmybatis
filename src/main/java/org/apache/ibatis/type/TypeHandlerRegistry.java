@@ -43,16 +43,14 @@ import org.apache.ibatis.io.Resources;
  */
 public final class TypeHandlerRegistry {
 
-    //[JdbcType-处理器]
+	// EnumMap，保存Mybatis内部提供的[JdbcType-处理器]
     private final Map<JdbcType, TypeHandler<?>> JDBC_TYPE_HANDLER_MAP = new EnumMap<JdbcType, TypeHandler<?>>(JdbcType.class);
 
-    //[JavaType-处理器]
-    /**
-     * TODO
-     */
+    //[JavaType-[JdbcType-处理器]]
     private final Map<Type, Map<JdbcType, TypeHandler<?>>> TYPE_HANDLER_MAP = new HashMap<Type, Map<JdbcType, TypeHandler<?>>>();
 
-    //维护了一个未知类型的处理器
+    //维护了一个未知类型的处理器， 处理Object类型
+	//运行时，会尝试进行向下类型转换找到合适的TypeHandler，如果依然失败，最后选择ObjectTypeHandler
     private final TypeHandler<Object> UNKNOWN_TYPE_HANDLER = new UnknownTypeHandler(this);
 
     //[处理器类-处理器]注册表，这个map存储了所有的TypeHandler
@@ -60,9 +58,10 @@ public final class TypeHandlerRegistry {
 
     public TypeHandlerRegistry() {
         /**
-         * 虽然都叫register但实现逻辑并不相同，此处分为两类：
+         * 虽然都叫register但实现逻辑并不相同，此处分为三类：
          * [JavaType-处理器]注册
          * [JdbcType-处理器]注册
+		 * [JavaType-JdbcType-处理器]注册
          */
 
         register(Boolean.class, new BooleanTypeHandler());
@@ -231,7 +230,8 @@ public final class TypeHandlerRegistry {
         // type drives generics here
         return (TypeHandler<T>) handler;
     }
-    //如果只注册了一个处理器，则返回这个；当注册多个时，就返回null，因为该方法是在jdbcHandlerMap.get(jdbcType)为空的情况下调用的。但是感觉这个用法比较奇怪
+    // 如果只注册了一个处理器，则返回这个；当注册多个时，就返回null，因为该方法是在jdbcHandlerMap.get(jdbcType)
+	// 为空的情况下调用的。但是感觉这个用法比较奇怪，用于处理只有一个处理器但是不按规范好好注册的情况
     private TypeHandler<?> pickSoleHandler(Map<JdbcType, TypeHandler<?>> jdbcHandlerMap) {
         TypeHandler<?> soleHandler = null;
         for (TypeHandler<?> handler : jdbcHandlerMap.values()) {
@@ -306,6 +306,7 @@ public final class TypeHandlerRegistry {
                 register(javaType, null, typeHandler);
             }
         } else {
+			//找不到对应的JdbcType，用null注册
             register(javaType, null, typeHandler);
         }
     }

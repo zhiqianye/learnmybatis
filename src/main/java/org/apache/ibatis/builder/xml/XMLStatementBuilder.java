@@ -92,7 +92,7 @@ public class XMLStatementBuilder extends BaseBuilder {
 		Class<?> resultTypeClass = resolveClass(resultType);
 		//结果集类型，FORWARD_ONLY|SCROLL_SENSITIVE|SCROLL_INSENSITIVE 中的一种
 		String resultSetType = context.getStringAttribute("resultSetType");
-		//语句类型, STATEMENT|PREPARED|CALLABLE 的一种
+		//语句类型, STATEMENT|PREPARED|CALLABLE 的一种，默认使用PREPARED
 		StatementType statementType = StatementType.valueOf(context.getStringAttribute("statementType", StatementType.PREPARED.toString()));
 		ResultSetType resultSetTypeEnum = resolveResultSetType(resultSetType);
 

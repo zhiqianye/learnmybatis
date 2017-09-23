@@ -104,7 +104,7 @@ public class XMLMapperBuilder extends BaseBuilder {
 			configuration.addLoadedResource(resource);
 			bindMapperForNamespace();
 		}
-
+		//这种设计好处是存在继承关系的元素可以不用考虑前后位置而都能被智能加载到
 		parsePendingResultMaps();
 		parsePendingChacheRefs();
 		parsePendingStatements();
@@ -174,7 +174,7 @@ public class XMLMapperBuilder extends BaseBuilder {
 			Iterator<ResultMapResolver> iter = incompleteResultMaps.iterator();
 			while (iter.hasNext()) {
 				try {
-					//解析的时候加入，这里又移除，还有这种操作……
+					//解析pending的元素
 					iter.next().resolve();
 					iter.remove();
 				} catch (IncompleteElementException e) {

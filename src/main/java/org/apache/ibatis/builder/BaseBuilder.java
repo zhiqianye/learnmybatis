@@ -36,6 +36,9 @@ import org.apache.ibatis.type.TypeHandlerRegistry;
  * 构建器的基类，建造者模式
  */
 public abstract class BaseBuilder {
+	/**
+	 * 保存构建中的各种配置信息，包括各种配置项，别名，mapper等
+	 */
 	protected final Configuration configuration;
 	protected final TypeAliasRegistry typeAliasRegistry;
 	protected final TypeHandlerRegistry typeHandlerRegistry;

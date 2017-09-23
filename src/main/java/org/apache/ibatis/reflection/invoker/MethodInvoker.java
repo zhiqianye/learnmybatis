@@ -23,7 +23,7 @@ import java.lang.reflect.Method;
  */
 
 /**
- * 方法调用器
+ * 方法调用器，功能类似：method.invoke(obj, args)
  */
 public class MethodInvoker implements Invoker {
     //如果方法有一个参数，则表示参数类型；如果有0或者大于1个参数，则为返回值类型

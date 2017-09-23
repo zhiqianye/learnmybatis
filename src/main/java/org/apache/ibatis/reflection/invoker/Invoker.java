@@ -22,7 +22,7 @@ import java.lang.reflect.InvocationTargetException;
  */
 
 /**
- * 调用器接口
+ * 调用器接口，反射类Class的Method、Field封装
  */
 public interface Invoker {
     //调用target，传参args

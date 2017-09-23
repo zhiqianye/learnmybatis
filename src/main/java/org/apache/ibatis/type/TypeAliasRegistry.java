@@ -149,7 +149,7 @@ public class TypeAliasRegistry {
         }
     }
 
-    //注册一个类对象，如果有Alias注解，则用注解获取别名；否则使用类的名称
+	//注册一个别名，优先使用Alias注解值，如果没有则使用类名
     public void registerAlias(Class<?> type) {
         String alias = type.getSimpleName();
         Alias aliasAnnotation = type.getAnnotation(Alias.class);

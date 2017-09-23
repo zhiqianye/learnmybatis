@@ -52,7 +52,46 @@ import org.apache.ibatis.type.JdbcType;
  */
 
 /**
- * XML配置构建器，建造者模式
+ * XML配置构建器，建造者模式，另附配置实例：
+ *
+ * <configuration>
+ * 	<properties resource="jdbc.properties">
+ * 		<property name="username" value="root" />
+ * 		<property name="password" value="123" />
+ * 	</properties>
+ * 	<settings>
+ * 		<setting name="localCacheScope" value="STATEMENT"/>
+ * 		<setting name="cacheEnabled" value="false" />
+ * 		<setting name="lazyLoadingEnabled" value="true" />
+ * 		<setting name="multipleResultSetsEnabled" value="true" />
+ * 		<setting name="useColumnLabel" value="true" />
+ * 		<setting name="useGeneratedKeys" value="false" />
+ * 		<setting name="defaultExecutorType" value="REUSE" />
+ * 		<setting name="defaultStatementTimeout" value="25000" />
+ * 	</settings>
+ * 	<typeAliases>
+ * 		<typeAlias alias="Student" type="com.mybatis3.domain.Student" />
+ * 		<typeAlias alias="Teacher" type="com.mybatis3.domain.Teacher" />
+ * 	</typeAliases>
+ * 	<typeHandlers>
+ * 		<typeHandler handler="com.mybatis3.typehandlers.PhoneTypeHandler" />
+ * 	</typeHandlers>
+ * 	<environments default="development">
+ * 		<environment id="development">
+ * 			<transactionManager type="JDBC" />
+ * 			<dataSource type="POOLED">
+ * 				<property name="driver" value="${driver}" />
+ * 				<property name="url" value="${url}" />
+ * 				<property name="username" value="${username}" />
+ * 				<property name="password" value="${password}" />
+ * 			</dataSource>
+ * 		</environment>
+ * 	</environments>
+ * 	<mappers>
+ * 		<mapper resource="com/mybatis3/mappers/StudentMapper.xml" />
+ * 		<mapper resource="com/mybatis3/mappers/TeacherMapper.xml" />
+ * 	</mappers>
+ * </configuration>
  */
 public class XMLConfigBuilder extends BaseBuilder {
 
@@ -558,6 +597,7 @@ public class XMLConfigBuilder extends BaseBuilder {
 					String resource = child.getStringAttribute("resource");
 					String url = child.getStringAttribute("url");
 					String mapperClass = child.getStringAttribute("class");
+					//三选一
 					if (resource != null && url == null && mapperClass == null) {
 						ErrorContext.instance().resource(resource);
 						InputStream inputStream = Resources.getResourceAsStream(resource);

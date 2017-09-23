@@ -40,12 +40,15 @@ import java.util.*;
  * @author Lasse Voss
  */
 /**
- * 映射器方法
+ * 映射器方法，的功能：
+ * 1. 解析Mapper接口的方法，并封装成MapperMethod对象。
+ * 2. 将Sql命令，正确路由到恰当的SqlSession的方法上。
  *
  */
 public class MapperMethod {
-
+	// 保存了Sql命令的类型和键id
 	private final SqlCommand command;
+	// 保存了Mapper接口方法的解析信息
 	private final MethodSignature method;
 
 	public MapperMethod(Class<?> mapperInterface, Method method, Configuration config) {
@@ -53,6 +56,7 @@ public class MapperMethod {
 		this.method = new MethodSignature(config, mapperInterface, method);
 	}
 
+	// 根据解析结果，路由到恰当的SqlSession方法上
 	public Object execute(SqlSession sqlSession, Object[] args) {
 		Object result;
 		switch (command.getType()) {

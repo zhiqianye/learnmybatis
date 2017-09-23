@@ -13,30 +13,36 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package org.apache.ibatis.executor.keygen;
+package org.apache.ibatis.executor.resultset;
 
+import org.apache.ibatis.cursor.Cursor;
+
+import java.sql.CallableStatement;
+import java.sql.SQLException;
 import java.sql.Statement;
-
-import org.apache.ibatis.executor.Executor;
-import org.apache.ibatis.mapping.MappedStatement;
+import java.util.List;
 
 /**
  * @author Clinton Begin
  */
 
 /**
- * 空实现，不需要处理主键
+ * 结果集处理器
  */
-public class NoKeyGenerator implements KeyGenerator {
+public interface ResultSetHandler {
+	/**
+	 * 处理结果集
+	 */
+	<E> List<E> handleResultSets(Statement stmt) throws SQLException;
 
-	@Override
-	public void processBefore(Executor executor, MappedStatement ms, Statement stmt, Object parameter) {
-		// Do Nothing
-	}
+	/**
+	 * 处理游标结果集
+	 */
+	<E> Cursor<E> handleCursorResultSets(Statement stmt) throws SQLException;
 
-	@Override
-	public void processAfter(Executor executor, MappedStatement ms, Statement stmt, Object parameter) {
-		// Do Nothing
-	}
+	/**
+	 * 处理OUT参数
+	 */
+	void handleOutputParameters(CallableStatement cs) throws SQLException;
 
 }

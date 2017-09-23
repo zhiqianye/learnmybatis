@@ -46,7 +46,10 @@ import org.apache.ibatis.reflection.property.PropertyNamer;
  */
 
 /**
- * 反射器
+ * 反射器，保存一个类Class的反射Invoker信息集合
+ * Reflector reflector = new Reflector(Student.class);
+ * Invoker invoker = reflector.getSetInvoker("studId");
+ * invoker.invoke(student, new Object[] { 20 });
  */
 public class Reflector {
 

@@ -149,8 +149,10 @@ public class MapperBuilderAssistant extends BaseBuilder {
 	}
 
 	public ParameterMap addParameterMap(String id, Class<?> parameterClass, List<ParameterMapping> parameterMappings) {
+		// 处理namespace名称空间
 		id = applyCurrentNamespace(id, false);
 		ParameterMap parameterMap = new ParameterMap.Builder(configuration, id, parameterClass, parameterMappings).build();
+		// 注册至Configuration
 		configuration.addParameterMap(parameterMap);
 		return parameterMap;
 	}
@@ -193,8 +195,10 @@ public class MapperBuilderAssistant extends BaseBuilder {
 			if (!configuration.hasResultMap(extend)) {
 				throw new IncompleteElementException("Could not find a parent resultmap with id '" + extend + "'");
 			}
+			// 处理继承ResultMap属性
 			ResultMap resultMap = configuration.getResultMap(extend);
 			List<ResultMapping> extendedResultMappings = new ArrayList<ResultMapping>(resultMap.getResultMappings());
+			// 删除重复元素
 			extendedResultMappings.removeAll(resultMappings);
 			// Remove parent constructor if this resultMap declares a constructor.
 			boolean declaresConstructor = false;

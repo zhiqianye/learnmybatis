@@ -35,6 +35,7 @@ import org.apache.ibatis.type.TypeHandlerRegistry;
  */
 /**
  * JDBC3键值生成器,核心是使用JDBC3的Statement.getGeneratedKeys()
+ * 用于处理数据库支持自增主键的情况，如MySQL的auto_increment
  *
  */
 public class Jdbc3KeyGenerator implements KeyGenerator {

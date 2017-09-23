@@ -19,7 +19,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 /**
- * 默认反射器工厂
+ * 默认反射器工厂，缓存了多个类Class的反射器Reflector
+ * 聚合关系为：ReflectorFactory-Reflector-Invoker，
+ * 从宏观到微观进行反射处理
  */
 public class DefaultReflectorFactory implements ReflectorFactory {
     //默认开启Class对象缓存

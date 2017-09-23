@@ -93,10 +93,33 @@ import org.apache.ibatis.type.TypeHandlerRegistry;
 /**
  * @author Clinton Begin
  */
-public class Configuration {
 
+/**
+ * Mybatis重要组件，配置，重量级All-In-One对象，主要分为系统环境参数初始化和Mapper映射初始化。
+ * configuration
+ * |--- properties
+ * |--- settings
+ * |--- typeAliases
+ * |--- typeHandlers
+ * |--- objectFactory
+ * |--- plugins
+ * |--- environments
+ * |--- |--- environment
+ * |--- |--- |--- transactionManager
+ * |--- |--- |__ dataSource
+ * |__ mappers
+ *
+ *
+ */
+public class Configuration {
+	/**
+	 * environments节点
+	 */
 	protected Environment environment;
 
+	/**
+	 * settings节点开始
+	 */
 	protected boolean safeRowBoundsEnabled = false;
 	protected boolean safeResultHandlerEnabled = true;
 	protected boolean mapUnderscoreToCamelCase = false;
@@ -104,10 +127,11 @@ public class Configuration {
 	protected boolean multipleResultSetsEnabled = true;
 	protected boolean useGeneratedKeys = false;
 	protected boolean useColumnLabel = true;
+	//默认开启缓存
 	protected boolean cacheEnabled = true;
 	protected boolean callSettersOnNulls = false;
 	protected boolean useActualParamName = true;
-
+	//日志前缀
 	protected String logPrefix;
 	protected Class <? extends Log> logImpl;
 	protected Class <? extends VFS> vfsImpl;
@@ -116,16 +140,27 @@ public class Configuration {
 	protected Set<String> lazyLoadTriggerMethods = new HashSet<String>(Arrays.asList(new String[] { "equals", "clone", "hashCode", "toString" }));
 	protected Integer defaultStatementTimeout;
 	protected Integer defaultFetchSize;
+	//默认为简单执行器
 	protected ExecutorType defaultExecutorType = ExecutorType.SIMPLE;
 	protected AutoMappingBehavior autoMappingBehavior = AutoMappingBehavior.PARTIAL;
 	protected AutoMappingUnknownColumnBehavior autoMappingUnknownColumnBehavior = AutoMappingUnknownColumnBehavior.NONE;
+	/**
+	 * settings节点结束
+	 */
 
+	/**
+	 * properties节点
+	 */
+	//三种配置方式，分别是子元素property，url，resource
 	protected Properties variables = new Properties();
 	protected ReflectorFactory reflectorFactory = new DefaultReflectorFactory();
+	//对象工厂
 	protected ObjectFactory objectFactory = new DefaultObjectFactory();
+	//对象包装器工厂
 	protected ObjectWrapperFactory objectWrapperFactory = new DefaultObjectWrapperFactory();
-
+	//默认禁用延迟加载
 	protected boolean lazyLoadingEnabled = false;
+	//3.3.0及以上使用JAVASSIST，否则CGLIB
 	protected ProxyFactory proxyFactory = new JavassistProxyFactory(); // #224 Using internal Javassist instead of OGNL
 
 	protected String databaseId;
@@ -138,20 +173,36 @@ public class Configuration {
 	protected Class<?> configurationFactory;
 
 	protected final MapperRegistry mapperRegistry = new MapperRegistry(this);
+	//插件链
 	protected final InterceptorChain interceptorChain = new InterceptorChain();
+	//类型处理器注册表
 	protected final TypeHandlerRegistry typeHandlerRegistry = new TypeHandlerRegistry();
+	//类型别名注册表
 	protected final TypeAliasRegistry typeAliasRegistry = new TypeAliasRegistry();
 	protected final LanguageDriverRegistry languageRegistry = new LanguageDriverRegistry();
-
+	//映射Statement的map
 	protected final Map<String, MappedStatement> mappedStatements = new StrictMap<MappedStatement>("Mapped Statements collection");
+	//缓存的map
 	protected final Map<String, Cache> caches = new StrictMap<Cache>("Caches collection");
+	//结果映射的map
 	protected final Map<String, ResultMap> resultMaps = new StrictMap<ResultMap>("Result Maps collection");
+	//参数映射的map
 	protected final Map<String, ParameterMap> parameterMaps = new StrictMap<ParameterMap>("Parameter Maps collection");
 	protected final Map<String, KeyGenerator> keyGenerators = new StrictMap<KeyGenerator>("Key Generators collection");
 
 	protected final Set<String> loadedResources = new HashSet<String>();
 	protected final Map<String, XNode> sqlFragments = new StrictMap<XNode>("XML fragments parsed from previous mappers");
 
+	//不完整的SQL语句
+	/*
+	Mapper.xml中的很多元素，是可以指定父元素的。然而，Mybatis解析元素时，是按顺序解析的，
+	先解析的元素，其继承的元素被配置在下面了，还没有解析到，内存中尚不存在，怎么办呢？
+	Mybatis就把前面的元素标记为incomplete的，然后继续解析后续元素。
+
+	简言之就是，你的父元素可以配置在你的后边，不限制非得配置在前面。无论你配置在哪儿，Mybatis都能“智能”的获取到，并正确继承。
+
+	这便是在Configuration对象内，有的叫incomplete的原因。
+	 */
 	protected final Collection<XMLStatementBuilder> incompleteStatements = new LinkedList<XMLStatementBuilder>();
 	protected final Collection<CacheRefResolver> incompleteCacheRefs = new LinkedList<CacheRefResolver>();
 	protected final Collection<ResultMapResolver> incompleteResultMaps = new LinkedList<ResultMapResolver>();
@@ -170,6 +221,7 @@ public class Configuration {
 	}
 
 	public Configuration() {
+		//注册更多的类型别名，至于为何不直接在TypeAliasRegistry里注册，还需进一步研究
 		typeAliasRegistry.registerAlias("JDBC", JdbcTransactionFactory.class);
 		typeAliasRegistry.registerAlias("MANAGED", ManagedTransactionFactory.class);
 
@@ -509,25 +561,35 @@ public class Configuration {
 		return languageRegistry.getDefaultDriver();
 	}
 
+	//创建元对象
 	public MetaObject newMetaObject(Object object) {
 		return MetaObject.forObject(object, objectFactory, objectWrapperFactory, reflectorFactory);
 	}
 
+	//创建参数处理器
 	public ParameterHandler newParameterHandler(MappedStatement mappedStatement, Object parameterObject, BoundSql boundSql) {
+		//创建ParameterHandler
 		ParameterHandler parameterHandler = mappedStatement.getLang().createParameterHandler(mappedStatement, parameterObject, boundSql);
+		//插件在这里插入
 		parameterHandler = (ParameterHandler) interceptorChain.pluginAll(parameterHandler);
 		return parameterHandler;
 	}
 
+	//创建结果集处理器
 	public ResultSetHandler newResultSetHandler(Executor executor, MappedStatement mappedStatement, RowBounds rowBounds, ParameterHandler parameterHandler,
 												ResultHandler resultHandler, BoundSql boundSql) {
+		//创建默认结果集处理器
 		ResultSetHandler resultSetHandler = new DefaultResultSetHandler(executor, mappedStatement, parameterHandler, resultHandler, boundSql, rowBounds);
+		//插件在这里插入
 		resultSetHandler = (ResultSetHandler) interceptorChain.pluginAll(resultSetHandler);
 		return resultSetHandler;
 	}
 
+	//创建Statement处理器
 	public StatementHandler newStatementHandler(Executor executor, MappedStatement mappedStatement, Object parameterObject, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) {
+		//路由选择Statement处理器，代理模式的粗鲁实现
 		StatementHandler statementHandler = new RoutingStatementHandler(executor, mappedStatement, parameterObject, rowBounds, resultHandler, boundSql);
+		//插件在这里插入
 		statementHandler = (StatementHandler) interceptorChain.pluginAll(statementHandler);
 		return statementHandler;
 	}
@@ -536,6 +598,7 @@ public class Configuration {
 		return newExecutor(transaction, defaultExecutorType);
 	}
 
+	//新建执行器
 	public Executor newExecutor(Transaction transaction, ExecutorType executorType) {
 		executorType = executorType == null ? defaultExecutorType : executorType;
 		executorType = executorType == null ? ExecutorType.SIMPLE : executorType;
@@ -636,6 +699,9 @@ public class Configuration {
 		return parameterMaps.containsKey(id);
 	}
 
+	/**
+	 * 往Map里放置一个MappedStatement对象，结果Map中变成两个元素，原因在于StrictMap会执行长、短键的put
+	 */
 	public void addMappedStatement(MappedStatement ms) {
 		mappedStatements.put(ms.getId(), ms);
 	}
@@ -681,7 +747,7 @@ public class Configuration {
 	public Collection<MethodResolver> getIncompleteMethods() {
 		return incompleteMethods;
 	}
-
+	//查询映射statement
 	public MappedStatement getMappedStatement(String id) {
 		return this.getMappedStatement(id, true);
 	}
@@ -701,6 +767,7 @@ public class Configuration {
 		interceptorChain.addInterceptor(interceptor);
 	}
 
+	//添加包名下的所有类
 	public void addMappers(String packageName, Class<?> superType) {
 		mapperRegistry.addMappers(packageName, superType);
 	}
@@ -813,6 +880,7 @@ public class Configuration {
 		}
 	}
 
+	//静态内部类，严格的Map，不允许多次覆盖key所对应的value
 	protected static class StrictMap<V> extends HashMap<String, V> {
 
 		private static final long serialVersionUID = -4950446264854982944L;
@@ -838,6 +906,20 @@ public class Configuration {
 			this.name = name;
 		}
 
+		/*
+
+		Mybatis重写了put方法，将id和namespace+id的键，都put了进去，指向同一个MappedStatement对象。
+		如果shortKey键值存在，就填充为占位符对象Ambiguity，属于覆盖操作。
+		这样做的好处是，方便我们编程。
+
+		Student std  = sqlSession.selectOne("findStudentById", 1);
+		Student std  = sqlSession.selectOne("com.mybatis3.mappers.StudentMapper.findStudentById", 1);
+		上面两句代码，是等价的，Mybatis不强制我们一定要加namespace名称空间，所以，这是存放两个键的良苦用心。
+
+		namespace名称空间不同，而id相同时，使用namespace+id获取Sql，完全可以正确执行。如果只用id获取，那么，将导致错误。
+		get时，如果得到的是一个占位对象Ambiguity，就抛出异常，要求使用full name进行调用。
+		full name就是namespace+id。Ambiguity意为模糊不清。
+		 */
 		@SuppressWarnings("unchecked")
 		public V put(String key, V value) {
 			if (containsKey(key)) {
@@ -846,8 +928,10 @@ public class Configuration {
 			if (key.contains(".")) {
 				final String shortKey = getShortName(key);
 				if (super.get(shortKey) == null) {
+					//如果这个短键没有值，则插入
 					super.put(shortKey, value);
 				} else {
+					//如果这个短键有值了，则插入一个模糊量，下次get的时候会提示报错
 					super.put(shortKey, (V) new Ambiguity(shortKey));
 				}
 			}
@@ -866,6 +950,7 @@ public class Configuration {
 			return value;
 		}
 
+		//短键，点号分割的最后一个
 		private String getShortName(String key) {
 			final String[] keyParts = key.split("\\.");
 			return keyParts[keyParts.length - 1];

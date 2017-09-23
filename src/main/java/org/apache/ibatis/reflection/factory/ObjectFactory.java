@@ -25,7 +25,8 @@ import java.util.Properties;
  */
 
 /**
- * MyBatis使用ObjectFactory类创建所有对象
+ * MyBatis使用ObjectFactory类创建所有对象，
+ * 经过跟踪代码发现使用的根源为MetaObject，生成对象时使用
  */
 public interface ObjectFactory {
 

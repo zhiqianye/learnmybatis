@@ -143,5 +143,7 @@
 
 17. 执行器
 
+   装饰模式，statementHandler->RoutingStatementHandler
+
 18. 插件
 

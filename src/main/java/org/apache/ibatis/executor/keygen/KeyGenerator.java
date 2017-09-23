@@ -26,6 +26,9 @@ import org.apache.ibatis.mapping.MappedStatement;
 
 /**
  * 键值生成器
+ * 注意：KeyGenerator的作用，是返回数据库生成的自增主键值，而不是生成数据库的自增主键值。
+ * 返回的主键值放到parameter object的主键属性上。
+ * 基于策略处理
  */
 public interface KeyGenerator {
 

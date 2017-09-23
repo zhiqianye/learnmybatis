@@ -23,7 +23,7 @@ import java.lang.reflect.InvocationTargetException;
  */
 
 /**
- * 获取成员属性的调用器
+ * 获取成员属性的调用器，功能类似：field.get(obj)
  */
 public class GetFieldInvoker implements Invoker {
     private Field field;

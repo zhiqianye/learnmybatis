@@ -25,7 +25,11 @@ import java.sql.SQLException;
  */
 
 /**
- * 类型处理器
+ * 类型处理器。
+ * 总体而言分为两个方法，setParameter和getResult
+ * setParameter应用于ParameterHandler转换设置参数
+ * getResult应用于ResultSetHandler转换获取结果
+ *
  * @param <T> 设置或获取值的类型
  */
 public interface TypeHandler<T> {

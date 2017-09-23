@@ -44,7 +44,7 @@ import org.xml.sax.SAXParseException;
  */
 
 /**
- * XPath解析器
+ * XPath解析器，是对XPath的封装，更方便操作
  * XPath使用路径表达式来选取XML文档中的节点或节点集。
  */
 public class XPathParser {

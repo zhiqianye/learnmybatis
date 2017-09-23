@@ -30,7 +30,8 @@ import org.w3c.dom.NodeList;
  * @author Clinton Begin
  */
 /**
- * 对org.w3c.dom.Node的包装
+ * 对org.w3c.dom.Node的包装，结合XPathParser和Node，
+ * 封装了对xml文件节点的各种便捷操作
  *
  */
 public class XNode {
