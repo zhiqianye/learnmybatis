@@ -21,6 +21,7 @@ package org.apache.ibatis.parsing;
 
 /**
  * 通用的token处理类，主要用于处理mybatis的xml文件中的#{arg}和${arg}的情况
+ * 如何处理这样的占位符，则由不同的策略TokenHandler来完成
  */
 public class GenericTokenParser {
     //参数开始标记，如${

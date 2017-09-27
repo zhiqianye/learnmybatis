@@ -145,5 +145,13 @@
 
    装饰模式，statementHandler->RoutingStatementHandler
 
+   cglib和javassist代理用法略生涩。。。
+
+   AccessController.doPrivileged
+
+   ​
+
 18. 插件
+
+   动态代理
 

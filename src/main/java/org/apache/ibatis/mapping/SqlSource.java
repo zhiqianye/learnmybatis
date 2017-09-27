@@ -25,6 +25,11 @@ package org.apache.ibatis.mapping;
 /**
  * 代表从xml文件中或者注释中读到的源SQL
  * 它用来接收来自用户的参数输入，并创建数据库可执行的SQL。
+ * 本接口共有4个实现：
+ * DynamicSqlSource:处理动态sql。
+ * RawSqlSource：处理静态sql，其内部装饰StaticSqlSource。
+ * StaticSqlSource：处理静态sql，无论是静态sql，还是动态sql，最终的处理结果，都是静态sql。
+ * ProviderSqlSource:处理注解Annotation形式的sql。
  */
 public interface SqlSource {
 

@@ -108,7 +108,9 @@ public class XMLStatementBuilder extends BaseBuilder {
 		boolean resultOrdered = context.getBooleanAttribute("resultOrdered", false);
 
 		//解析之前先解析<include>SQL片段
+		//Mybatis在解析<include>标签时，就已经静态替换${xxxx}占位符了。
 		XMLIncludeTransformer includeParser = new XMLIncludeTransformer(configuration, builderAssistant);
+		// 重点关注的方法，将sql片段解析到真正使用的地方
 		includeParser.applyIncludes(context.getNode());
 
 		// Parse selectKey after includes and remove them.
@@ -123,6 +125,7 @@ public class XMLStatementBuilder extends BaseBuilder {
 		String keyStatementId = id + SelectKeyGenerator.SELECT_KEY_SUFFIX;
 		keyStatementId = builderAssistant.applyCurrentNamespace(keyStatementId, true);
 		if (configuration.hasKeyGenerator(keyStatementId)) {
+			// 表示存在selectKey获取主键值方式
 			keyGenerator = configuration.getKeyGenerator(keyStatementId);
 		} else {
 			keyGenerator = context.getBooleanAttribute("useGeneratedKeys",
@@ -136,6 +139,9 @@ public class XMLStatementBuilder extends BaseBuilder {
 				keyGenerator, keyProperty, keyColumn, databaseId, langDriver, resultSets);
 	}
 
+	/**
+	 * 用于处理SelectKey的情况，这里面使用了SelectKeyGenerator
+	 */
 	private void processSelectKeyNodes(String id, Class<?> parameterTypeClass, LanguageDriver langDriver) {
 		List<XNode> selectKeyNodes = context.evalNodes("selectKey");
 		if (configuration.getDatabaseId() != null) {
@@ -184,6 +190,10 @@ public class XMLStatementBuilder extends BaseBuilder {
 
 		id = builderAssistant.applyCurrentNamespace(id, false);
 
+		/**
+		 * <selectKey>元素，会被Mybatis解析为一个MappedStatement对象，
+		 * 并作为构造参数传递至SelectKeyGenerator内保存起来
+		 */
 		MappedStatement keyStatement = configuration.getMappedStatement(id, false);
 		configuration.addKeyGenerator(id, new SelectKeyGenerator(keyStatement, executeBefore));
 	}

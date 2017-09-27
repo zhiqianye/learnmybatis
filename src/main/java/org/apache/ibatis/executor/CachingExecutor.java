@@ -95,12 +95,15 @@ public class CachingExecutor implements Executor {
 		return delegate.queryCursor(ms, parameter, rowBounds);
 	}
 
+	//原理是缓存里存在，就返回，没有就调用Executor delegate到数据库中查询。
 	@Override
 	public <E> List<E> query(MappedStatement ms, Object parameterObject, RowBounds rowBounds, ResultHandler resultHandler, CacheKey key, BoundSql boundSql)
 			throws SQLException {
 		Cache cache = ms.getCache();
 		if (cache != null) {
+			// flushCache作用于二级缓存
 			flushCacheIfRequired(ms);
+			// useCache作用于二级缓存
 			if (ms.isUseCache() && resultHandler == null) {
 				ensureNoOutParams(ms, parameterObject, boundSql);
 				@SuppressWarnings("unchecked")

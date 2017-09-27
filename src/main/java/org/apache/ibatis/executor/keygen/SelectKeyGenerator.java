@@ -33,11 +33,27 @@ import org.apache.ibatis.session.RowBounds;
 
 /**
  * 用于处理数据库不支持自增主键的情况，比如Oracle的sequence序列
+ *
+ * <insert id="insertStudent" parameterType="Student" >
+ * 		<selectKey keyProperty="studId" resultType="int" order="BEFORE">
+ * 			SELECT ELEARNING.STUD_ID_SEQ.NEXTVAL FROM DUAL
+ * 		</selectKey>
+ * 		INSERT INTO
+ * 			STUDENTS(STUD_ID, NAME, EMAIL, DOB, PHONE)
+ * 		VALUES
+ * 			(#{studId}, #{name},
+ * 			#{email}, #{dob}, #{phone})
+ * </insert>
+ *
  */
 public class SelectKeyGenerator implements KeyGenerator {
 
 	public static final String SELECT_KEY_SUFFIX = "!selectKey";
 	private boolean executeBefore;
+	/**
+	 * <selectKey>元素，会被Mybatis解析为一个MappedStatement对象，
+	 * 并作为构造参数传递至SelectKeyGenerator内保存起来
+	 */
 	private MappedStatement keyStatement;
 
 	public SelectKeyGenerator(MappedStatement keyStatement, boolean executeBefore) {

@@ -46,6 +46,7 @@ import static org.apache.ibatis.executor.ExecutionPlaceholder.EXECUTION_PLACEHOL
 
 /**
  * 执行器基类，经典的模板设计模式
+ * 在执行update、insert、delete、flushCache="true"、commit、rollback、LocalCacheScope.STATEMENT等情况下，一级缓存就都会被清空。
  */
 public abstract class BaseExecutor implements Executor {
 
@@ -215,7 +216,8 @@ public abstract class BaseExecutor implements Executor {
 		}
 	}
 
-	//创建缓存Key
+	//缓存其实基本数据结构就是一个HashMap，缓存中是否存在缓存数据，依赖key的生成策略
+	//key的生成策略：id + offset + limit + sql + param value + environment id，这些值都相同，生成的key就相同
 	@Override
 	public CacheKey createCacheKey(MappedStatement ms, Object parameterObject, RowBounds rowBounds, BoundSql boundSql) {
 		if (closed) {

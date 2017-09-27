@@ -580,6 +580,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
 			final List<ResultMapping> propertyMappings = resultMap.getPropertyResultMappings();
 			for (ResultMapping propertyMapping : propertyMappings) {
 				// issue gcode #109 && issue #149
+				//关联查询且开启了懒加载模式
 				if (propertyMapping.getNestedQueryId() != null && propertyMapping.isLazy()) {
 					return configuration.getProxyFactory().createProxy(resultObject, lazyLoader, configuration, objectFactory, constructorArgTypes, constructorArgs);
 				}

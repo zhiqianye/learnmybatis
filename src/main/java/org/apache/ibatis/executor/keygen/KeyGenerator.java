@@ -34,8 +34,9 @@ public interface KeyGenerator {
 
 	//定了2个回调方法，processBefore,processAfter
 
+	//执行Statement之前调用
 	void processBefore(Executor executor, MappedStatement ms, Statement stmt, Object parameter);
-
+	//执行Statement之后调用
 	void processAfter(Executor executor, MappedStatement ms, Statement stmt, Object parameter);
 
 }

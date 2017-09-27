@@ -34,6 +34,7 @@ public class CacheRefResolver {
 		this.cacheRefNamespace = cacheRefNamespace;
 	}
 
+	//实际是对构建辅助类的封装，与ResultMapResolver类似
 	public Cache resolveCacheRef() {
 		return assistant.useCacheRef(cacheRefNamespace);
 	}

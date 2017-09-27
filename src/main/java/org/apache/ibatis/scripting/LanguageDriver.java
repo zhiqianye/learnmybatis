@@ -25,6 +25,7 @@ import org.apache.ibatis.session.Configuration;
 
 /**
  * 脚本语言驱动
+ * 辅助工具类，用于创建SqlSource
  *
  */
 public interface LanguageDriver {

@@ -182,7 +182,7 @@ public class Configuration {
 	protected final LanguageDriverRegistry languageRegistry = new LanguageDriverRegistry();
 	//映射Statement的map
 	protected final Map<String, MappedStatement> mappedStatements = new StrictMap<MappedStatement>("Mapped Statements collection");
-	//缓存的map
+	//缓存的map，基于命名空间，即key=com.mybatis3.mappers.TeacherMapper
 	protected final Map<String, Cache> caches = new StrictMap<Cache>("Caches collection");
 	//结果映射的map
 	protected final Map<String, ResultMap> resultMaps = new StrictMap<ResultMap>("Result Maps collection");
@@ -611,6 +611,17 @@ public class Configuration {
 			executor = new SimpleExecutor(this, transaction);
 		}
 		if (cacheEnabled) {
+			/**
+			 * 配置文件
+			 * <configuration>
+			 *   <settings>
+			 *     <setting name="cacheEnabled" value="true|false" />
+			 *   </settings>
+			 * </configuration>
+			 *
+			 * mapper文件
+			 * <cache eviction="FIFO" flushInterval="60000" size="512" readOnly="true"/>
+			 */
 			executor = new CachingExecutor(executor);
 		}
 		executor = (Executor) interceptorChain.pluginAll(executor);

@@ -58,14 +58,59 @@ public class XMLIncludeTransformer {
 	 * @param variablesContext Current context for static variables with values
 	 */
 	/*
-		<select id="selectUsers" resultType="map">
-			SELECT
-				<include refid="userColumns"/>
-			FROM
-				some_table
-			WHERE
-				id = #{id}
+		1.解析节点
+		<select id="countAll" resultType="int">
+			select count(1) from (
+				<include refid="studentProperties"></include>
+			) tmp
 		</select>
+
+		2.include节点替换为sqlFragment节点
+		<select id="countAll" resultType="int">
+			select count(1) from (
+					<sql id="studentProperties">
+						select
+							stud_id as studId
+							, name, email
+							, dob
+							, phone
+						from students
+					</sql>
+			) tmp
+		</select>
+
+		3.将sqlFragment的子节点（文本节点）insert到sqlFragment节点的前面。对于dom来说，文本也是一个节点，叫TextNode。
+		<select id="countAll" resultType="int">
+			select count(1) from (
+						select
+							stud_id as studId
+							, name, email
+							, dob
+							, phone
+						from students
+					<sql id="studentProperties">
+						select
+							stud_id as studId
+							, name, email
+							, dob
+							, phone
+						from students
+					</sql>
+			) tmp
+		</select>
+
+		4.移除sqlFragment节点
+		<select id="countAll" resultType="int">
+			select count(1) from (
+						select
+							stud_id as studId
+							, name, email
+							, dob
+							, phone
+						from students
+			) tmp
+		</select>
+		这也是为什么要移除<selectKey> and <include>节点的原因。
 	 */
 	private void applyIncludes(Node source, final Properties variablesContext) {
 		if (source.getNodeName().equals("include")) {
@@ -88,25 +133,32 @@ public class XMLIncludeTransformer {
 				// no new context - use inherited fully
 				fullContext = variablesContext;
 			}
+			//递归
 			applyIncludes(toInclude, fullContext);
 			if (toInclude.getOwnerDocument() != source.getOwnerDocument()) {
 				toInclude = source.getOwnerDocument().importNode(toInclude, true);
 			}
+			// 将include节点，替换为sqlFragment节点
 			source.getParentNode().replaceChild(toInclude, source);
 			while (toInclude.hasChildNodes()) {
+				//在节点前插入
 				toInclude.getParentNode().insertBefore(toInclude.getFirstChild(), toInclude);
 			}
+			// 移除sqlFragment节点
 			toInclude.getParentNode().removeChild(toInclude);
 		} else if (source.getNodeType() == Node.ELEMENT_NODE) {
 			NodeList children = source.getChildNodes();
 			for (int i=0; i<children.getLength(); i++) {
+				// 递归调用
 				applyIncludes(children.item(i), variablesContext);
 			}
 		} else if (source.getNodeType() == Node.ATTRIBUTE_NODE && !variablesContext.isEmpty()) {
 			// replace variables in all attribute values
+			// 通过PropertyParser替换所有${xxx}占位符(attribute属性)
 			source.setNodeValue(PropertyParser.parse(source.getNodeValue(), variablesContext));
 		} else if (source.getNodeType() == Node.TEXT_NODE && !variablesContext.isEmpty()) {
 			// replace variables ins all text nodes
+			// 通过PropertyParser替换所有${xxx}占位符(文本节点)
 			source.setNodeValue(PropertyParser.parse(source.getNodeValue(), variablesContext));
 		}
 	}

@@ -53,6 +53,7 @@ public interface StatementHandler {
 	<E> Cursor<E> queryCursor(Statement statement) throws SQLException;
 
 	//获取BoundSql
+	//BoundSql对象存储String sql，而BoundSql则由StatementHandler对象获取
 	BoundSql getBoundSql();
 
 	//获取参数处理器

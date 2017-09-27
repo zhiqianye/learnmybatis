@@ -54,7 +54,7 @@ import org.apache.ibatis.type.TypeHandler;
  */
 /**
  * 映射构建器助手，建造者模式,继承BaseBuilder
- *
+ * 另外也可以跟踪源码，可知MapperBuilderAssistant与mapper一一对应
  */
 public class MapperBuilderAssistant extends BaseBuilder {
 
@@ -83,7 +83,7 @@ public class MapperBuilderAssistant extends BaseBuilder {
 			throw new BuilderException("Wrong namespace. Expected '"
 					+ this.currentNamespace + "' but found '" + currentNamespace + "'.");
 		}
-		//都一样了还赋值？
+		//即只能赋值1次，或者多次赋重复值
 		this.currentNamespace = currentNamespace;
 	}
 

@@ -47,6 +47,7 @@ public class ResultMapResolver {
 		this.autoMapping = autoMapping;
 	}
 
+	//实际是对构建辅助类的封装，与CachaeRefResolver类似
 	public ResultMap resolve() {
 		return assistant.addResultMap(this.id, this.type, this.extend, this.discriminator, this.resultMappings, this.autoMapping);
 	}

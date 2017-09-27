@@ -33,6 +33,7 @@ import org.apache.ibatis.session.Configuration;
  */
 /**
  * 映射的Statement
+ * 在Mybatis中，每一个select|insert|update|delete标签，都会被解析为一个MappedStatement对象
  *
  */
 public final class MappedStatement {
@@ -44,6 +45,7 @@ public final class MappedStatement {
 	private Integer timeout;
 	private StatementType statementType;
 	private ResultSetType resultSetType;
+	//最终执行的sql字符串就是由SqlSource提供的
 	private SqlSource sqlSource;
 	private Cache cache;
 	private ParameterMap parameterMap;
@@ -77,6 +79,7 @@ public final class MappedStatement {
 			mappedStatement.parameterMap = new ParameterMap.Builder(configuration, "defaultParameterMap", null, new ArrayList<ParameterMapping>()).build();
 			mappedStatement.resultMaps = new ArrayList<ResultMap>();
 			mappedStatement.sqlCommandType = sqlCommandType;
+			//每一个MappedStatement，都有一个非空的KeyGenerator引用
 			mappedStatement.keyGenerator = configuration.isUseGeneratedKeys() && SqlCommandType.INSERT.equals(sqlCommandType) ? new Jdbc3KeyGenerator() : new NoKeyGenerator();
 			String logId = id;
 			if (configuration.getLogPrefix() != null) {

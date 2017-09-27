@@ -21,7 +21,7 @@ import java.util.Properties;
  * @author Clinton Begin
  */
 /**
- * 属性解析器
+ * 属性解析器，针对${xxx}的情况
  */
 public class PropertyParser {
 
@@ -36,7 +36,7 @@ public class PropertyParser {
     }
 
     /**
-     * 标记处理实现类，用于解析属性对象
+     * 标记处理实现类，用于解析属性对象，处理${xxx}占位符
      */
     private static class VariableTokenHandler implements TokenHandler {
         private Properties variables;
