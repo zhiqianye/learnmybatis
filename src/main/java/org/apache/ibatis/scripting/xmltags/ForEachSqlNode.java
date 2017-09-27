@@ -24,6 +24,10 @@ import org.apache.ibatis.session.Configuration;
 /**
  * @author Clinton Begin
  */
+
+/**
+ * foreach SQL节点
+ */
 public class ForEachSqlNode implements SqlNode {
 	public static final String ITEM_PREFIX = "__frch_";
 	// OGNL表达式计算器
@@ -49,15 +53,20 @@ public class ForEachSqlNode implements SqlNode {
 		this.configuration = configuration;
 	}
 
+	private static String itemizeItem(String item, int i) {
+		return new StringBuilder(ITEM_PREFIX).append(item).append("_").append(i).toString();
+	}
+
 	@Override
 	public boolean apply(DynamicContext context) {
 		Map<String, Object> bindings = context.getBindings();
-		// 计算集合表达式
+		// 计算集合表达式，解析collectionExpression->iterable，核心用的ognl
 		final Iterable<?> iterable = evaluator.evaluateIterable(collectionExpression, bindings);
 		if (!iterable.iterator().hasNext()) {
 			return true;
 		}
 		boolean first = true;
+		//加上(
 		applyOpen(context);
 		int i = 0;
 		// 遍历拼接sql
@@ -74,10 +83,12 @@ public class ForEachSqlNode implements SqlNode {
 			// Issue #709
 			if (o instanceof Map.Entry) {
 				@SuppressWarnings("unchecked")
+				//map按照key，value格式绑定
 				Map.Entry<Object, Object> mapEntry = (Map.Entry<Object, Object>) o;
 				applyIndex(context, mapEntry.getKey(), uniqueNumber);
 				applyItem(context, mapEntry.getValue(), uniqueNumber);
 			} else {
+				//非map按照i，o方式绑定
 				applyIndex(context, i, uniqueNumber);
 				applyItem(context, o, uniqueNumber);
 			}
@@ -88,12 +99,14 @@ public class ForEachSqlNode implements SqlNode {
 			context = oldContext;
 			i++;
 		}
+		//加上)
 		applyClose(context);
 		return true;
 	}
 
 	private void applyIndex(DynamicContext context, Object o, int i) {
 		if (index != null) {
+			//按照index和key当时绑定
 			context.bind(index, o);
 			context.bind(itemizeItem(index, i), o);
 		}
@@ -118,10 +131,7 @@ public class ForEachSqlNode implements SqlNode {
 		}
 	}
 
-	private static String itemizeItem(String item, int i) {
-		return new StringBuilder(ITEM_PREFIX).append(item).append("_").append(i).toString();
-	}
-
+	//被过滤的动态上下文
 	private static class FilteredDynamicContext extends DynamicContext {
 		private DynamicContext delegate;
 		private int index;
@@ -174,7 +184,7 @@ public class ForEachSqlNode implements SqlNode {
 
 	}
 
-
+	//前缀上下文
 	private class PrefixedContext extends DynamicContext {
 		private DynamicContext delegate;
 		private String prefix;

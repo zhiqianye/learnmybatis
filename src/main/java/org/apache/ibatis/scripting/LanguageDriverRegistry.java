@@ -15,6 +15,9 @@
  */
 package org.apache.ibatis.scripting;
 
+import org.apache.ibatis.scripting.defaults.RawLanguageDriver;
+import org.apache.ibatis.scripting.xmltags.XMLLanguageDriver;
+
 import java.util.HashMap;
 import java.util.Map;
 
